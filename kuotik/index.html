@@ -6,19 +6,19 @@
   <meta name="theme-color" content="#0F766E">
 
   <!-- SEO -->
-  <title>kuotik | App de Gestion de Préstamos</title>
-  <meta name="description" content="Kuotik es la app gratis para gestionar prestamos de dinero desde tu celular. Controla intereses, mora por dias, cronogramas de pago y genera contratos en PDF con firma. Emprende prestando dinero.">
-  <meta name="keywords" content="prestamos, gestion de prestamos, interes, mora, contrato de prestamo, app de prestamos, prestar dinero, cronograma de pagos, PDF prestamo, Kuotik, app gratis prestamos, Peru, emprender prestando, prestamista, prestatario, garante">
+  <title>kuotik | App de Gestión de Préstamos</title>
+  <meta name="description" content="kuotik es la app gratis para gestionar préstamos de dinero desde tu celular. Controla intereses, mora por días, cronogramas de pago y genera contratos en PDF con firma. Emprende prestando dinero.">
+  <meta name="keywords" content="prestamos, gestion de prestamos, interes, mora, contrato de prestamo, app de prestamos, prestar dinero, cronograma de pagos, PDF prestamo, kuotik, app gratis prestamos, Peru, emprender prestando, prestamista, prestatario, garante">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="author" content="Kuotik">
+  <meta name="author" content="kuotik">
   <meta name="language" content="Spanish">
   <meta name="revisit-after" content="7 days">
   <link rel="canonical" href="https://kuotik.app/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Kuotik">
-  <meta property="og:title" content="Kuotik - App Gratis de Gestion de Prestamos">
+  <meta property="og:site_name" content="kuotik">
+  <meta property="og:title" content="kuotik | App de Gestión de Préstamos">
   <meta property="og:description" content="Gestiona tus prestamos, intereses y mora desde tu celular. Genera contratos en PDF. Emprende prestando dinero.">
   <meta property="og:image" content="brand/ad-3.jpg">
   <meta property="og:image:width" content="600">
@@ -28,13 +28,13 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Kuotik - App de Gestion de Prestamos">
+  <meta name="twitter:title" content="kuotik | App de Gestión de Préstamos">
   <meta name="twitter:description" content="Gestiona tus prestamos, intereses y mora desde tu celular. Gratis.">
   <meta name="twitter:image" content="brand/ad-3.jpg">
 
   <!-- PWA / Mobile -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Kuotik">
+  <meta name="apple-mobile-web-app-title" content="kuotik">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
 
@@ -48,7 +48,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Kuotik",
+    "name": "kuotik",
     "description": "App gratis para gestionar prestamos de dinero, intereses, mora y generar contratos en PDF desde tu celular.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Web, Android, iOS",
@@ -107,6 +107,9 @@
 
     .nav-item.active { color: var(--c-primary); }
     .nav-item.active svg { stroke: var(--c-primary); }
+    .nav-item-side.active { background: var(--c-primary); color: #fff; }
+    .nav-item-side.active svg { stroke: #fff; }
+    .nav-item-side.active.btn-primary { background: var(--c-primary-dark); }
 
     input, select, textarea { font-family: 'Montserrat', sans-serif; }
     input:focus, select:focus, textarea:focus { outline: 2px solid var(--c-primary); outline-offset: 1px; }
@@ -164,16 +167,55 @@
     .toggle-pills button.active { background: var(--c-primary); color: #fff; }
   </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen pb-20 lg:pb-0">
 
-  <div class="max-w-md mx-auto bg-slate-50 min-h-screen relative">
+  <!-- SIDEBAR DESKTOP -->
+  <aside class="hidden lg:flex lg:fixed lg:top-0 lg:left-0 lg:w-60 lg:h-screen lg:bg-white lg:border-r lg:border-slate-200 lg:flex-col lg:z-40">
+    <div class="px-6 py-6 border-b border-slate-100 flex justify-center">
+      <img src="brand/logo.png" alt="kuotik" class="h-10 w-auto" onerror="this.style.display='none'">
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1">
+      <button onclick="navigate('dashboard')" data-nav="dashboard" class="nav-item-side nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 active:scale-95 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.5a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V15a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V9.75M8.25 21h8.25"/></svg>
+        Inicio
+      </button>
+      <button onclick="navigate('loans')" data-nav="loans" class="nav-item-side nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 active:scale-95 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+        Prestamos
+      </button>
+      <button onclick="navigate('new-loan')" data-nav="new-loan" class="nav-item-side nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-white btn-primary hover:opacity-90 active:scale-95 transition mt-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        Nuevo prestamo
+      </button>
+      <button onclick="navigate('cobros')" data-nav="cobros" class="nav-item-side nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 active:scale-95 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        Cobros
+      </button>
+      <button onclick="navigate('config')" data-nav="config" class="nav-item-side nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 active:scale-95 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+        Ajustes
+      </button>
+    </nav>
+    <div class="px-4 py-4 border-t border-slate-100">
+      <p class="text-[10px] text-slate-400 text-center">kuotik - App de prestamos</p>
+    </div>
+  </aside>
 
-    <!-- HEADER (sin boton de config, con logo) -->
-    <header class="header-gradient text-white px-5 pt-5 pb-5 rounded-b-3xl shadow-lg sticky top-0 z-30">
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="lg:ml-60">
+    <div class="max-w-md mx-auto lg:max-w-2xl bg-slate-50 min-h-screen relative">
+
+    <!-- HEADER (mobile: con logo, desktop: oculto) -->
+    <header class="header-gradient text-white px-5 pt-5 pb-5 rounded-b-3xl shadow-lg sticky top-0 z-30 lg:hidden">
       <div class="flex items-center justify-center">
-        <img src="brand/logo.png" alt="Kuotik" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('header-text').classList.remove('hidden')">
-        <h1 id="header-text" class="text-2xl font-extrabold tracking-tight hidden">Kuotik</h1>
+        <img src="brand/logo.png" alt="kuotik" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('header-text').classList.remove('hidden')">
+        <h1 id="header-text" class="text-2xl font-extrabold tracking-tight hidden">kuotik</h1>
       </div>
+    </header>
+    <!-- Header desktop -->
+    <header class="hidden lg:flex header-gradient text-white px-8 py-4 items-center justify-between sticky top-0 z-30">
+      <h2 id="desktop-page-title" class="text-lg font-bold">Inicio</h2>
+      <img src="brand/logo.png" alt="kuotik" class="h-7 w-auto" onerror="this.style.display='none'">
     </header>
 
     <main class="px-4 py-5">
@@ -541,8 +583,29 @@
         </form>
 
         <div class="card p-4 mt-4">
-          <h3 class="font-semibold text-sm text-slate-700 mb-2">Datos de la app</h3>
-          <button onclick="limpiarDatos()" class="text-red-500 text-xs font-semibold">Borrar todos los datos</button>
+          <h3 class="font-semibold text-sm text-slate-700 mb-3">Respaldo de datos</h3>
+          <div class="space-y-2">
+            <button onclick="exportarDatos()" class="w-full btn-primary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+              Exportar respaldo (JSON)
+            </button>
+            <button onclick="document.getElementById('import-file').click()" class="w-full btn-secondary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+              Subir respaldo
+            </button>
+            <input type="file" id="import-file" accept=".json,application/json" class="hidden">
+            <button onclick="copiarPortapapeles()" class="w-full btn-secondary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.625c0-1.364-.99-2.495-2.25-2.624M15.75 17.25v-1.875c0-.621-.504-1.125-1.125-1.125H10.5M15.75 17.25h-5.25m5.25 0v3.375M10.5 17.25v3.375m0-3.375a9.06 9.06 0 0 1-1.5-.124M10.5 17.25v-1.875c0-.621-.504-1.125-1.125-1.125H4.125M10.5 17.25H4.125"/></svg>
+              Copiar al portapapeles
+            </button>
+            <button onclick="pegarPortapapeles()" class="w-full btn-secondary py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25Z"/></svg>
+              Pegar del portapapeles
+            </button>
+          </div>
+          <div class="border-t border-slate-100 mt-3 pt-3">
+            <button onclick="limpiarDatos()" class="text-red-500 text-xs font-semibold">Borrar todos los datos</button>
+          </div>
         </div>
       </section>
 
@@ -557,8 +620,8 @@
 
     </main>
 
-    <!-- BOTTOM NAV (5 items, + en el centro) -->
-    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-slate-200 z-40">
+    <!-- BOTTOM NAV (5 items, + en el centro) - solo mobile -->
+    <nav class="lg:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-slate-200 z-40">
       <div class="grid grid-cols-5 py-2 relative">
         <button onclick="navigate('dashboard')" data-nav="dashboard" class="nav-item flex flex-col items-center gap-0.5 text-slate-400 py-1 active:scale-90 transition">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.5a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V15a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V9.75M8.25 21h8.25"/></svg>
@@ -586,6 +649,7 @@
     </nav>
 
   </div>
+  </div>
 
   <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-3 rounded-xl text-sm font-medium z-50 hidden toast max-w-xs text-center"></div>
 
@@ -612,32 +676,32 @@
 const store = localforage.createInstance({
   name: 'Kuotik',
   storeName: 'appdata',
-  description: 'Datos de la app Kuotik'
+  description: 'Datos de la app kuotik'
 });
 
 const CONTACTO = '51933844790';
 const CONTACTO_DISPLAY = '+51 933 844 790';
-const VIZARNIK_WA = CONTACTO; // Vizarnik usa el mismo numero que Kuotik
+const VIZARNIK_WA = CONTACTO; // Vizarnik usa el mismo numero que kuotik
 
-// Anuncios verticales intercalados: Kuotik (K) y Vizarnik (V)
+// Anuncios verticales intercalados: kuotik (K) y Vizarnik (V)
 // Orden: K1, V1, K2, V2, K3, V3, V4
 const ADS = [
-  { src: 'brand/ad-1.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de Kuotik con una donacion.' },
+  { src: 'brand/ad-1.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de kuotik con una donacion.' },
   { src: 'ad/vizarnik/1.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio sobre creacion de imagenes para redes sociales. Quiero mas informacion del plan semanal.' },
-  { src: 'brand/ad-2.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar Kuotik: ' },
+  { src: 'brand/ad-2.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar kuotik: ' },
   { src: 'ad/vizarnik/2.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (anuncio 2). Quiero mas informacion.' },
-  { src: 'brand/ad-3.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con Kuotik gestionas tus prestamos, intereses y moras desde tu celular. Empieza a emprender prestando dinero.' },
+  { src: 'brand/ad-3.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con kuotik gestionas tus prestamos, intereses y moras desde tu celular. Empieza a emprender prestando dinero.' },
   { src: 'ad/vizarnik/3.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su publicidad sobre gestion de redes sociales (anuncio 3). Me gustaria mas informacion del plan.' },
   { src: 'ad/vizarnik/4.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de creacion de videos e imagenes para redes sociales (anuncio 4). Quiero mas informacion.' },
 ];
 
 // Anuncios horizontales (banners) intercalados para listas
 const ADS_H = [
-  { src: 'brand/ad-1b.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de Kuotik con una donacion.' },
+  { src: 'brand/ad-1b.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de kuotik con una donacion.' },
   { src: 'ad/vizarnik/1b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio horizontal sobre creacion de imagenes para redes sociales. Quiero mas informacion.' },
-  { src: 'brand/ad-2b.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar Kuotik: ' },
+  { src: 'brand/ad-2b.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar kuotik: ' },
   { src: 'ad/vizarnik/2b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (banner 2). Quiero mas informacion.' },
-  { src: 'brand/ad-3b.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con Kuotik gestionas tus prestamos desde tu celular.' },
+  { src: 'brand/ad-3b.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con kuotik gestionas tus prestamos desde tu celular.' },
   { src: 'ad/vizarnik/3b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su banner sobre gestion de redes sociales (3). Me gustaria mas informacion.' },
   { src: 'ad/vizarnik/4b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el plan semanal de contenido para redes sociales (banner 4). Quiero mas informacion.' },
 ];
@@ -753,8 +817,11 @@ function navigate(view, loanId) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const nav = document.querySelector(`.nav-item[data-nav="${view}"]`);
-  if (nav) nav.classList.add('active');
+  document.querySelectorAll('.nav-item[data-nav="' + view + '"]').forEach(n => n.classList.add('active'));
+  // Desktop page title
+  const titles = { dashboard:'Inicio', loans:'Prestamos', 'new-loan':'Nuevo prestamo', cobros:'Cobros', config:'Ajustes', 'loan-detail':'Detalle de prestamo' };
+  const dt = document.getElementById('desktop-page-title');
+  if (dt) dt.textContent = titles[view] || 'kuotik';
   window.scrollTo({ top: 0, behavior: 'smooth' });
   render(view);
 }
@@ -1184,6 +1251,75 @@ async function limpiarDatos() {
   }
 }
 
+/* =================== RESPALDO DE DATOS =================== */
+function getBackupJSON() {
+  return JSON.stringify({ config: state.config, loans: state.loans, exportDate: new Date().toISOString(), app: 'kuotik' }, null, 2);
+}
+
+function exportarDatos() {
+  const json = getBackupJSON();
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'kuotik_respaldo_' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Respaldo exportado');
+}
+
+async function copiarPortapapeles() {
+  const json = getBackupJSON();
+  try {
+    await navigator.clipboard.writeText(json);
+    toast('Copiado al portapapeles');
+  } catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = json;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); toast('Copiado al portapapeles'); }
+    catch(e2) { toast('No se pudo copiar'); }
+    document.body.removeChild(ta);
+  }
+}
+
+async function pegarPortapapeles() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (!text || text.trim().length === 0) { toast('Portapapeles vacio'); return; }
+    importarDesdeTexto(text);
+  } catch(e) {
+    toast('No se pudo leer el portapapeles. Usa subir respaldo.');
+  }
+}
+
+function importarDesdeTexto(text) {
+  try {
+    const data = JSON.parse(text);
+    if (!data.config && !data.loans) { toast('JSON invalido'); return; }
+    if (data.config) state.config = data.config;
+    if (data.loans) state.loans = data.loans;
+    saveState();
+    toast('Datos importados correctamente');
+    navigate('dashboard');
+  } catch(e) {
+    toast('JSON invalido o corrupto');
+  }
+}
+
+document.getElementById('import-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  importarDesdeTexto(text);
+  e.target.value = '';
+});
+
 /* =================== DETALLE =================== */
 function renderLoanDetail() {
   const loan = state.loans.find(l => l.id === state.currentLoanId);
@@ -1390,7 +1526,7 @@ async function generarPDFDoc(loanId) {
     doc.setFillColor(...colorPrim);
     doc.rect(0, stripY, pageW, 8, 'F');
     setFont('normal',7); doc.setTextColor(255,255,255);
-    doc.text('Contrato Generado por Kuotik: +51 933 844 790', pageW/2, stripY+5, { align:'center' });
+    doc.text('Contrato Generado por kuotik: +51 933 844 790', pageW/2, stripY+5, { align:'center' });
   }
   return doc;
 }
