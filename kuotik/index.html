@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0F766E">
+
+  <!-- SEO -->
+  <title>kuotik | App de Gestion de Préstamos</title>
+  <meta name="description" content="Kuotik es la app gratis para gestionar prestamos de dinero desde tu celular. Controla intereses, mora por dias, cronogramas de pago y genera contratos en PDF con firma. Emprende prestando dinero.">
+  <meta name="keywords" content="prestamos, gestion de prestamos, interes, mora, contrato de prestamo, app de prestamos, prestar dinero, cronograma de pagos, PDF prestamo, Kuotik, app gratis prestamos, Peru, emprender prestando, prestamista, prestatario, garante">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Kuotik">
+  <meta name="language" content="Spanish">
+  <meta name="revisit-after" content="7 days">
+  <link rel="canonical" href="https://kuotik.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kuotik">
+  <meta property="og:title" content="Kuotik - App Gratis de Gestion de Prestamos">
+  <meta property="og:description" content="Gestiona tus prestamos, intereses y mora desde tu celular. Genera contratos en PDF. Emprende prestando dinero.">
+  <meta property="og:image" content="brand/ad-3.jpg">
+  <meta property="og:image:width" content="600">
+  <meta property="og:image:height" content="800">
+  <meta property="og:locale" content="es_PE">
+  <meta property="og:url" content="https://kuotik.app/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kuotik - App de Gestion de Prestamos">
+  <meta name="twitter:description" content="Gestiona tus prestamos, intereses y mora desde tu celular. Gratis.">
+  <meta name="twitter:image" content="brand/ad-3.jpg">
+
+  <!-- PWA / Mobile -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kuotik">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="brand/favicon.png">
+  <link rel="apple-touch-icon" href="brand/favicon.png">
+  <link rel="shortcut icon" href="brand/favicon.png">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Kuotik",
+    "description": "App gratis para gestionar prestamos de dinero, intereses, mora y generar contratos en PDF desde tu celular.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web, Android, iOS",
+    "inLanguage": "es-PE",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "PEN" },
+    "featureList": ["Gestion de prestamos", "Calculo de intereses porcentuales o monto fijo", "Mora configurable por dia, semana o mes", "Cronograma de pagos", "Contratos en PDF con firma", "Datos almacenados localmente"]
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+          colors: {
+            primary: 'var(--c-primary)',
+            'primary-dark': 'var(--c-primary-dark)',
+            'primary-light': 'var(--c-primary-light)',
+            accent: 'var(--c-accent)',
+            'accent-dark': '#d97706',
+            dark: 'var(--c-dark)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --c-primary: #0F766E;
+      --c-primary-dark: #134E4A;
+      --c-primary-light: #CCFBF1;
+      --c-secondary: #F1F5F9;
+      --c-accent: #F59E0B;
+      --c-dark: #0F172A;
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    html, body { font-family: 'Montserrat', sans-serif; background: var(--c-secondary); color: var(--c-dark); }
+    body { overscroll-behavior-y: contain; }
+
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn .3s cubic-bezier(.4,0,.2,1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .nav-item.active { color: var(--c-primary); }
+    .nav-item.active svg { stroke: var(--c-primary); }
+
+    input, select, textarea { font-family: 'Montserrat', sans-serif; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--c-primary); outline-offset: 1px; }
+
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04); transition: transform .15s; }
+    .card:active { transform: scale(.98); }
+
+    .btn-primary { background: var(--c-primary); color: #fff; transition: transform .1s, background .15s; }
+    .btn-primary:active { background: var(--c-primary-dark); transform: scale(.97); }
+
+    .btn-secondary { background: #fff; color: var(--c-primary); border: 1px solid var(--c-primary-light); transition: transform .1s; }
+    .btn-secondary:active { transform: scale(.97); }
+
+    .ad-box { aspect-ratio: 3 / 4; }
+    .header-gradient { background: linear-gradient(135deg, var(--c-primary-dark), var(--c-primary)); }
+
+    .toast { animation: slideUp .3s ease; }
+    @keyframes slideUp { from { transform: translateY(120%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    .switch { width: 44px; height: 26px; background: #cbd5e1; border-radius: 999px; position: relative; transition: background .2s; flex-shrink: 0; }
+    .switch.on { background: var(--c-primary); }
+    .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: transform .2s; }
+    .switch.on::after { transform: translateX(18px); }
+
+    .progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .progress-bar > div { height: 100%; background: var(--c-primary); transition: width .4s ease; }
+
+    .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .scroll-x::-webkit-scrollbar { display: none; }
+
+    /* Slideshow - infinite loop */
+    .slides-container { display: flex; height: 100%; transition: transform .5s cubic-bezier(.4,0,.2,1); }
+    .slides-container.no-transition { transition: none !important; }
+    .slide { min-width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; position: relative; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .slide-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.5); transition: all .3s; }
+    .slide-dot.active { width: 20px; border-radius: 4px; background: #fff; }
+
+    .fab-btn { animation: fabPulse 3s ease-in-out infinite; }
+    @keyframes fabPulse { 0%,100% { box-shadow: 0 4px 12px rgba(15,118,110,.4); } 50% { box-shadow: 0 4px 20px rgba(15,118,110,.6); } }
+
+    .stat-card { animation: statIn .4s ease backwards; }
+    @keyframes statIn { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+
+    .modal-enter { animation: modalIn .25s ease; }
+    @keyframes modalIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .toggle-pills { display: flex; background: #f1f5f9; border-radius: 10px; padding: 3px; flex-shrink: 0; }
+    .toggle-pills button { padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 7px; transition: all .2s; color: #64748b; }
+    .toggle-pills button.active { background: var(--c-primary); color: #fff; }
+  </style>
+</head>
+<body class="min-h-screen pb-20">
+
+  <div class="max-w-md mx-auto bg-slate-50 min-h-screen relative">
+
+    <!-- HEADER (sin boton de config, con logo) -->
+    <header class="header-gradient text-white px-5 pt-5 pb-5 rounded-b-3xl shadow-lg sticky top-0 z-30">
+      <div class="flex items-center justify-center">
+        <img src="brand/logo.png" alt="Kuotik" class="h-9 w-auto" onerror="this.style.display='none'; document.getElementById('header-text').classList.remove('hidden')">
+        <h1 id="header-text" class="text-2xl font-extrabold tracking-tight hidden">Kuotik</h1>
+      </div>
+    </header>
+
+    <main class="px-4 py-5">
+
+      <!-- ================= DASHBOARD ================= -->
+      <section id="view-dashboard" class="view active">
+        <div id="dash-welcome" class="card p-5 mb-4 border-l-4 border-primary">
+          <h2 class="font-bold text-lg">Bienvenido</h2>
+          <p class="text-sm text-slate-600 mt-1">Configura primero tus datos y las tasas para empezar a registrar prestamos.</p>
+          <button onclick="navigate('config')" class="btn-primary mt-3 px-4 py-2 rounded-xl text-sm font-semibold">Ir a configuracion</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div class="card p-4 stat-card" style="animation-delay:0s">
+            <p class="text-xs text-slate-500 font-medium">Total prestado</p>
+            <p id="stat-prestado" class="text-xl font-bold text-slate-800 mt-1">S/ 0.00</p>
+          </div>
+          <div class="card p-4 stat-card" style="animation-delay:.1s">
+            <p class="text-xs text-slate-500 font-medium">Por cobrar</p>
+            <p id="stat-cobrar" class="text-xl font-bold text-accent-dark mt-1">S/ 0.00</p>
+          </div>
+          <div class="card p-4 stat-card" style="animation-delay:.2s">
+            <p class="text-xs text-slate-500 font-medium">Intereses ganados</p>
+            <p id="stat-intereses" class="text-xl font-bold text-primary-dark mt-1">S/ 0.00</p>
+          </div>
+          <div class="card p-4 stat-card" style="animation-delay:.3s">
+            <p class="text-xs text-slate-500 font-medium">Mora acumulada</p>
+            <p id="stat-mora" class="text-xl font-bold text-red-500 mt-1">S/ 0.00</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold text-base">Prestamos recientes</h3>
+          <button onclick="navigate('loans')" class="text-primary text-xs font-semibold">Ver todos</button>
+        </div>
+        <div id="dash-loans" class="space-y-3 mb-4"></div>
+
+        <!-- Slideshow 3:4 vertical con imagenes publicitarias intercaladas en bucle infinito -->
+        <div class="border-t border-slate-200 pt-5 mt-2 mb-6">
+          <div class="ad-box relative overflow-hidden rounded-2xl bg-slate-300 shadow-md">
+            <div class="slides-container" id="slides-container">
+              <!-- Slides generados por JS (renderSlides) -->
+            </div>
+
+            <!-- Boton pausar/reanudar -->
+            <button id="pause-btn" onclick="togglePauseSlideshow()" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white active:scale-90 transition">
+              <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>
+              </svg>
+            </button>
+
+            <!-- Indicadores generados por JS -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10" id="slide-dots"></div>
+          </div>
+        </div>
+
+        <div class="card p-4 mb-4">
+          <h3 class="font-semibold text-sm text-slate-700 mb-3">Distribucion de capital</h3>
+          <div class="h-44" id="chart-container">
+            <canvas id="chart-distribucion"></canvas>
+          </div>
+        </div>
+
+        <!-- Anuncio horizontal (separado del vertical por el chart) -->
+        <div id="dash-ad-h" class="mb-4"></div>
+      </section>
+
+      <!-- ================= PRESTAMOS ================= -->
+      <section id="view-loans" class="view">
+        <h2 class="text-xl font-bold mb-4">Prestamos</h2>
+        <div class="flex gap-2 mb-4 scroll-x">
+          <button data-filter="all" class="filter-btn btn-primary px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap">Todos</button>
+          <button data-filter="active" class="filter-btn bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-slate-600">Activos</button>
+          <button data-filter="mora" class="filter-btn bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-slate-600">Con mora</button>
+          <button data-filter="paid" class="filter-btn bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-slate-600">Pagados</button>
+        </div>
+        <div id="loans-list" class="space-y-3"></div>
+      </section>
+
+      <!-- ================= COBROS ================= -->
+      <section id="view-cobros" class="view">
+        <h2 class="text-xl font-bold mb-4">Cobros</h2>
+        <div class="card p-4 mb-4 bg-red-50 border border-red-100">
+          <div class="flex items-center gap-2 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
+            <h3 class="font-bold text-sm text-red-700">Vencidos</h3>
+          </div>
+          <div id="cobros-vencidos" class="space-y-2"></div>
+        </div>
+        <div class="card p-4 mb-4 bg-amber-50 border border-amber-100">
+          <div class="flex items-center gap-2 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <h3 class="font-bold text-sm text-amber-700">Proximos 7 dias</h3>
+          </div>
+          <div id="cobros-proximos" class="space-y-2"></div>
+        </div>
+
+        <!-- Anuncio horizontal intercalado -->
+        <div id="cobros-ad-1" class="mb-4"></div>
+
+        <div class="card p-4 bg-emerald-50 border border-emerald-100">
+          <div class="flex items-center gap-2 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+            <h3 class="font-bold text-sm text-emerald-700">Pagos recibidos</h3>
+          </div>
+          <div id="cobros-pagados" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ================= NUEVO PRESTAMO ================= -->
+      <section id="view-new-loan" class="view">
+        <h2 class="text-xl font-bold mb-1">Nuevo prestamo</h2>
+        <p class="text-sm text-slate-500 mb-4">Completa los datos del prestamo.</p>
+
+        <!-- Warning separado, no destruye el form -->
+        <div id="no-prestamista-warning" class="card p-5 text-center hidden">
+          <p class="text-sm text-slate-500 mb-3">Debes agregar al menos un prestamista en Ajustes.</p>
+          <button type="button" onclick="navigate('config')" class="btn-primary px-4 py-2 rounded-xl text-sm font-semibold">Ir a ajustes</button>
+        </div>
+
+        <form id="form-loan" class="space-y-4">
+          <div class="card p-4 space-y-3">
+            <h3 class="font-semibold text-sm text-slate-700">Prestamista y fecha</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Prestamista</label>
+              <select name="prestamistaId" id="sel-prestamista" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                <option value="">Selecciona un prestamista</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Fecha del prestamo</label>
+              <input type="date" name="fecha" id="loan-fecha" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm">
+              <p class="text-[11px] text-slate-400 mt-1">El contrato y cronograma se programan para esta fecha.</p>
+            </div>
+          </div>
+
+          <div class="card p-4 space-y-3">
+            <h3 class="font-semibold text-sm text-slate-700">Datos del prestatario</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="col-span-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Nombre completo</label>
+                <input type="text" name="nombre" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="Ej. Juan Perez">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">DNI</label>
+                <input type="text" name="dni" required inputmode="numeric" maxlength="8" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="12345678">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Genero</label>
+                <select name="genero" required class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                  <option value="m">Masculino</option>
+                  <option value="f">Femenino</option>
+                </select>
+              </div>
+              <div class="col-span-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Telefono (WhatsApp)</label>
+                <input type="tel" name="telefono" id="prestatario-tel" required inputmode="numeric" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="999888777">
+                <p class="text-[11px] text-slate-400 mt-1">Se usa para enviar el contrato por WhatsApp.</p>
+              </div>
+              <div class="col-span-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Direccion</label>
+                <textarea name="direccion" required rows="2" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm resize-none" placeholder="Av. / Jr. / Calle, numero, distrito"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-4 space-y-3">
+            <h3 class="font-semibold text-sm text-slate-700">Datos del prestamo</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Monto (S/)</label>
+                <input type="number" name="monto" id="monto" required step="0.01" min="1" inputmode="decimal" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="300.00" oninput="actualizarPreview()">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Plazo (meses)</label>
+                <input type="number" name="plazo" id="plazo" required min="1" max="36" inputmode="numeric" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="4" oninput="actualizarPreview()">
+              </div>
+            </div>
+
+            <div>
+              <div class="toggle-row mb-1">
+                <label class="text-xs font-medium text-slate-600">Interes mensual</label>
+                <div class="toggle-pills">
+                  <button type="button" id="btn-interes-pct" onclick="setInteresTipo('porcentaje')" class="active">%</button>
+                  <button type="button" id="btn-interes-monto" onclick="setInteresTipo('monto')">S/</button>
+                </div>
+              </div>
+              <input type="number" name="interes" id="interes" required step="0.01" min="0" inputmode="decimal" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="20" oninput="actualizarPreview()">
+              <input type="hidden" name="interesTipo" id="interesTipo" value="porcentaje">
+            </div>
+
+            <div class="pt-2 border-t border-slate-100">
+              <div class="toggle-row mb-1">
+                <label class="text-xs font-medium text-slate-600">Mora</label>
+                <div class="toggle-pills">
+                  <button type="button" id="btn-mora-pct" onclick="setMoraTipo('porcentaje')" class="active">%</button>
+                  <button type="button" id="btn-mora-monto" onclick="setMoraTipo('monto')">S/</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <input type="number" name="moraValor" id="moraValor" required step="0.01" min="0" inputmode="decimal" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="5" oninput="actualizarPreview()">
+                  <input type="hidden" name="moraTipo" id="moraTipo" value="porcentaje">
+                </div>
+                <div>
+                  <select name="moraPeriodo" id="moraPeriodo" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm bg-white" onchange="toggleMoraN()">
+                    <option value="diario">Diario</option>
+                    <option value="semanal">Semanal</option>
+                    <option value="quincenal">Quincenal</option>
+                    <option value="mensual">Mensual</option>
+                    <option value="cada_n_dias">Cada N dias</option>
+                  </select>
+                </div>
+              </div>
+              <div id="mora-n-field" class="hidden mt-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Cada cuantos dias</label>
+                <input type="number" name="moraN" id="moraN" min="1" inputmode="numeric" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="3" value="1">
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1" id="mora-desc">Se cobra por dia de retraso sobre la cuota vencida.</p>
+            </div>
+          </div>
+
+          <div class="card p-4 space-y-3">
+            <div class="toggle-row">
+              <h3 class="font-semibold text-sm text-slate-700">Incluir garante</h3>
+              <button type="button" id="toggle-garante" onclick="toggleGarante()" class="switch"></button>
+            </div>
+            <div id="garante-fields" class="space-y-3 hidden">
+              <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Nombre del garante</label>
+                  <input type="text" name="garanteNombre" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="Nombre completo">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">DNI</label>
+                  <input type="text" name="garanteDni" inputmode="numeric" maxlength="8" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="12345678">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Genero</label>
+                  <select name="garanteGenero" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm bg-white">
+                    <option value="m">Masculino</option>
+                    <option value="f">Femenino</option>
+                  </select>
+                </div>
+                <div class="col-span-2">
+                  <label class="block text-xs font-medium text-slate-600 mb-1">Direccion</label>
+                  <textarea name="garanteDireccion" rows="2" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm resize-none" placeholder="Direccion completa"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="preview-card" class="card p-4 bg-primary-light hidden">
+            <h3 class="font-semibold text-sm text-primary-dark mb-3">Resumen del prestamo</h3>
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <span class="text-slate-600">Cuota mensual:</span>
+              <span id="prev-cuota" class="font-bold text-right">S/ 0.00</span>
+              <span class="text-slate-600">Cuota final:</span>
+              <span id="prev-final" class="font-bold text-right">S/ 0.00</span>
+              <span class="text-slate-600">Total a devolver:</span>
+              <span id="prev-total" class="font-bold text-right">S/ 0.00</span>
+              <span class="text-slate-600">Ganancia total:</span>
+              <span id="prev-ganancia" class="font-bold text-right text-primary-dark">S/ 0.00</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-sm">Crear prestamo</button>
+        </form>
+      </section>
+
+      <!-- ================= CONFIG ================= -->
+      <section id="view-config" class="view">
+        <h2 class="text-xl font-bold mb-4">Configuracion</h2>
+
+        <div class="card p-4 mb-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold text-sm text-slate-700">Prestamistas</h3>
+            <button onclick="toggleFormPrestamista()" class="text-primary text-xs font-semibold">+ Agregar</button>
+          </div>
+          <div id="prestamistas-list" class="space-y-2"></div>
+          <div id="form-prestamista" class="hidden mt-3 p-3 bg-slate-50 rounded-xl space-y-2">
+            <input type="hidden" name="editId" id="editId">
+            <input type="text" name="pNombre" id="pNombre" placeholder="Nombre completo" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm">
+            <div class="grid grid-cols-3 gap-2">
+              <input type="text" name="pDni" id="pDni" placeholder="DNI" inputmode="numeric" maxlength="8" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm col-span-2">
+              <select name="pGenero" id="pGenero" class="w-full px-2 py-2 border border-slate-200 rounded-xl text-sm bg-white">
+                <option value="m">M</option>
+                <option value="f">F</option>
+              </select>
+            </div>
+            <input type="text" name="pTel" id="pTel" placeholder="Telefono (opcional)" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm">
+            <textarea name="pDir" id="pDir" rows="2" placeholder="Direccion" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm resize-none"></textarea>
+            <div class="flex gap-2">
+              <button onclick="guardarPrestamista()" class="btn-primary flex-1 py-2 rounded-xl text-sm font-semibold">Guardar</button>
+              <button onclick="cancelarFormPrestamista()" class="bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-semibold">Cancelar</button>
+            </div>
+          </div>
+        </div>
+
+        <form id="form-config" class="space-y-4">
+          <div class="card p-4 space-y-4">
+            <h3 class="font-semibold text-sm text-slate-700">Tasas</h3>
+            <div>
+              <div class="toggle-row mb-1">
+                <label class="text-xs font-medium text-slate-600">Interes mensual</label>
+                <div class="toggle-pills">
+                  <button type="button" id="btn-cfg-interes-pct" onclick="setCfgInteresTipo('porcentaje')" class="active">%</button>
+                  <button type="button" id="btn-cfg-interes-monto" onclick="setCfgInteresTipo('monto')">S/</button>
+                </div>
+              </div>
+              <input type="number" name="interes" id="cfgInteres" required step="0.01" min="0" inputmode="decimal" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="20">
+              <input type="hidden" name="interesTipo" id="cfgInteresTipo" value="porcentaje">
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+              <div class="toggle-row mb-1">
+                <label class="text-xs font-medium text-slate-600">Mora</label>
+                <div class="toggle-pills">
+                  <button type="button" id="btn-cfg-mora-pct" onclick="setCfgMoraTipo('porcentaje')" class="active">%</button>
+                  <button type="button" id="btn-cfg-mora-monto" onclick="setCfgMoraTipo('monto')">S/</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <input type="number" name="moraValor" id="cfgMoraValor" required step="0.01" min="0" inputmode="decimal" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="5">
+                  <input type="hidden" name="moraTipo" id="cfgMoraTipo" value="porcentaje">
+                </div>
+                <div>
+                  <select name="moraPeriodo" id="cfgMoraPeriodo" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm bg-white" onchange="toggleCfgMoraN()">
+                    <option value="diario">Diario</option>
+                    <option value="semanal">Semanal</option>
+                    <option value="quincenal">Quincenal</option>
+                    <option value="mensual">Mensual</option>
+                    <option value="cada_n_dias">Cada N dias</option>
+                  </select>
+                </div>
+              </div>
+              <div id="cfg-mora-n-field" class="hidden mt-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Cada cuantos dias</label>
+                <input type="number" name="moraN" id="cfgMoraN" min="1" inputmode="numeric" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="3" value="1">
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-4 space-y-3">
+            <div class="toggle-row">
+              <div>
+                <h3 class="font-semibold text-sm text-slate-700">Empresa / Banco</h3>
+                <p class="text-[11px] text-slate-400">Activa si prestas a nombre de una empresa.</p>
+              </div>
+              <button type="button" id="toggle-empresa" onclick="toggleEmpresa()" class="switch"></button>
+            </div>
+            <div id="empresa-fields" class="space-y-3 hidden">
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Razon social</label>
+                <input type="text" name="razonSocial" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="Mi Empresa S.A.C.">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">RUC</label>
+                <input type="text" name="ruc" inputmode="numeric" maxlength="11" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" placeholder="20123456789">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-sm">Guardar configuracion</button>
+        </form>
+
+        <div class="card p-4 mt-4">
+          <h3 class="font-semibold text-sm text-slate-700 mb-2">Datos de la app</h3>
+          <button onclick="limpiarDatos()" class="text-red-500 text-xs font-semibold">Borrar todos los datos</button>
+        </div>
+      </section>
+
+      <!-- ================= DETALLE PRESTAMO ================= -->
+      <section id="view-loan-detail" class="view">
+        <button onclick="navigate('loans')" class="flex items-center gap-1 text-sm text-slate-500 mb-3 active:scale-95 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+          Volver
+        </button>
+        <div id="detail-content"></div>
+      </section>
+
+    </main>
+
+    <!-- BOTTOM NAV (5 items, + en el centro) -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-slate-200 z-40">
+      <div class="grid grid-cols-5 py-2 relative">
+        <button onclick="navigate('dashboard')" data-nav="dashboard" class="nav-item flex flex-col items-center gap-0.5 text-slate-400 py-1 active:scale-90 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.5a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V15a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 0 .75.75h4.5a.75.75 0 0 0 .75-.75V9.75M8.25 21h8.25"/></svg>
+          <span class="text-[10px] font-medium">Inicio</span>
+        </button>
+        <button onclick="navigate('loans')" data-nav="loans" class="nav-item flex flex-col items-center gap-0.5 text-slate-400 py-1 active:scale-90 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+          <span class="text-[10px] font-medium">Prestamos</span>
+        </button>
+        <button onclick="navigate('new-loan')" data-nav="new-loan" class="nav-item flex flex-col items-center py-1">
+          <span class="btn-primary fab-btn rounded-full w-12 h-12 flex items-center justify-center -mt-5 active:scale-90 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          </span>
+          <span class="text-[10px] font-medium text-slate-500">Nuevo</span>
+        </button>
+        <button onclick="navigate('cobros')" data-nav="cobros" class="nav-item flex flex-col items-center gap-0.5 text-slate-400 py-1 active:scale-90 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+          <span class="text-[10px] font-medium">Cobros</span>
+        </button>
+        <button onclick="navigate('config')" data-nav="config" class="nav-item flex flex-col items-center gap-0.5 text-slate-400 py-1 active:scale-90 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+          <span class="text-[10px] font-medium">Ajustes</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+  <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-3 rounded-xl text-sm font-medium z-50 hidden toast max-w-xs text-center"></div>
+
+  <div id="loading" class="fixed inset-0 bg-black/40 z-[60] hidden items-center justify-center modal-enter">
+    <div class="bg-white rounded-2xl p-6 flex flex-col items-center gap-3">
+      <div class="w-8 h-8 border-3 border-slate-200 rounded-full spin" style="border-top-color: var(--c-primary)"></div>
+      <p id="loading-text" class="text-sm font-medium text-slate-600">Procesando...</p>
+    </div>
+  </div>
+
+  <div id="pdf-modal" class="fixed inset-0 bg-black/90 z-[70] hidden flex flex-col modal-enter">
+    <div class="flex justify-between items-center p-3 bg-white">
+      <h3 class="font-bold text-sm text-slate-700">Contrato de prestamo</h3>
+      <div class="flex gap-2">
+        <button onclick="descargarDesdeVisor()" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold">Descargar</button>
+        <button onclick="cerrarVisor()" class="bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold">Cerrar</button>
+      </div>
+    </div>
+    <iframe id="pdf-frame" class="flex-1 w-full bg-white" style="border:0"></iframe>
+  </div>
+
+<script>
+/* =================== STORAGE (IndexedDB via LocalForage) =================== */
+const store = localforage.createInstance({
+  name: 'Kuotik',
+  storeName: 'appdata',
+  description: 'Datos de la app Kuotik'
+});
+
+const CONTACTO = '51933844790';
+const CONTACTO_DISPLAY = '+51 933 844 790';
+const VIZARNIK_WA = CONTACTO; // Vizarnik usa el mismo numero que Kuotik
+
+// Anuncios verticales intercalados: Kuotik (K) y Vizarnik (V)
+// Orden: K1, V1, K2, V2, K3, V3, V4
+const ADS = [
+  { src: 'brand/ad-1.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de Kuotik con una donacion.' },
+  { src: 'ad/vizarnik/1.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio sobre creacion de imagenes para redes sociales. Quiero mas informacion del plan semanal.' },
+  { src: 'brand/ad-2.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar Kuotik: ' },
+  { src: 'ad/vizarnik/2.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (anuncio 2). Quiero mas informacion.' },
+  { src: 'brand/ad-3.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con Kuotik gestionas tus prestamos, intereses y moras desde tu celular. Empieza a emprender prestando dinero.' },
+  { src: 'ad/vizarnik/3.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su publicidad sobre gestion de redes sociales (anuncio 3). Me gustaria mas informacion del plan.' },
+  { src: 'ad/vizarnik/4.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de creacion de videos e imagenes para redes sociales (anuncio 4). Quiero mas informacion.' },
+];
+
+// Anuncios horizontales (banners) intercalados para listas
+const ADS_H = [
+  { src: 'brand/ad-1b.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de Kuotik con una donacion.' },
+  { src: 'ad/vizarnik/1b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio horizontal sobre creacion de imagenes para redes sociales. Quiero mas informacion.' },
+  { src: 'brand/ad-2b.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar Kuotik: ' },
+  { src: 'ad/vizarnik/2b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (banner 2). Quiero mas informacion.' },
+  { src: 'brand/ad-3b.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con Kuotik gestionas tus prestamos desde tu celular.' },
+  { src: 'ad/vizarnik/3b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su banner sobre gestion de redes sociales (3). Me gustaria mas informacion.' },
+  { src: 'ad/vizarnik/4b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el plan semanal de contenido para redes sociales (banner 4). Quiero mas informacion.' },
+];
+
+/* =================== ESTADO =================== */
+const state = {
+  config: {
+    prestamistas: [],
+    tasas: { interesTipo: 'porcentaje', interes: 0, moraTipo: 'porcentaje', mora: 0, moraPeriodo: 'diario', moraN: 1 },
+    empresa: { enabled: false, razonSocial: '', ruc: '' }
+  },
+  loans: [],
+  currentView: 'dashboard',
+  currentLoanId: null,
+  filter: 'all',
+  garanteOn: false,
+  empresaOn: false,
+  chartInstance: null,
+  editingPrestamistaId: null,
+  slideIndex: 0,
+  slideTimer: null,
+  slideshowPaused: false,
+  pauseTimeout: null,
+  currentPdfBlobUrl: null,
+  interesTipoPreview: 'porcentaje',
+  moraTipoPreview: 'porcentaje'
+};
+
+async function loadState() {
+  try {
+    const data = await store.getItem('state');
+    if (data) {
+      if (data.config) {
+        Object.assign(state.config, data.config);
+        if (!state.config.tasas) state.config.tasas = { interesTipo: 'porcentaje', interes: 0, moraTipo: 'porcentaje', mora: 0, moraPeriodo: 'diario', moraN: 1 };
+      }
+      if (data.loans) state.loans = data.loans;
+    }
+  } catch(e) { console.warn('Error cargando', e); }
+}
+async function saveState() {
+  try { await store.setItem('state', { config: state.config, loans: state.loans }); }
+  catch(e) { console.warn('Error guardando', e); }
+}
+
+/* =================== HELPERS =================== */
+function fmt(n) { return 'S/ ' + Number(n).toFixed(2); }
+function fmtDate(iso) { return new Date(iso).toLocaleDateString('es-PE', { day:'2-digit', month:'2-digit', year:'numeric' }); }
+function todayISO() { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString().split('T')[0]; }
+function diasEntre(f1, f2) { return Math.floor((new Date(f2) - new Date(f1)) / 86400000); }
+function generoArt(g, mayus) { if (mayus) return g === 'f' ? 'LA' : 'EL'; return g === 'f' ? 'la' : 'el'; }
+function termPrestatario(g) { return g === 'f' ? 'prestataria' : 'prestatario'; }
+
+function calcularInteresMensual(principal, valor, tipo) {
+  if (tipo === 'monto') return valor;
+  return principal * valor / 100;
+}
+function calcularCronograma(principal, interesValor, interesTipo, plazo) {
+  const interesMensual = calcularInteresMensual(principal, interesValor, interesTipo);
+  const schedule = [];
+  for (let i = 1; i <= plazo; i++) {
+    const esUltimo = i === plazo;
+    schedule.push({ month:i, interes:interesMensual, capital:esUltimo?principal:0, total:interesMensual+(esUltimo?principal:0), saldo:esUltimo?0:principal, paid:false, fechaPago:null });
+  }
+  return schedule;
+}
+function fechaVencimiento(fechaPrestamo, mes) { const d = new Date(fechaPrestamo); d.setMonth(d.getMonth()+mes); return d.toISOString(); }
+
+function moraCuota(loan, installment) {
+  if (installment.paid) return 0;
+  const hoy = new Date();
+  const venc = new Date(fechaVencimiento(loan.fecha, installment.month));
+  if (venc >= hoy) return 0;
+  const diasRetraso = diasEntre(venc, hoy);
+  if (diasRetraso <= 0) return 0;
+  let periodos;
+  switch(loan.moraPeriodo) {
+    case 'semanal': periodos = Math.floor(diasRetraso/7); break;
+    case 'quincenal': periodos = Math.floor(diasRetraso/15); break;
+    case 'mensual': periodos = Math.floor(diasRetraso/30); break;
+    case 'cada_n_dias': periodos = Math.floor(diasRetraso/(loan.moraN||1)); break;
+    default: periodos = diasRetraso;
+  }
+  if (periodos <= 0) return 0;
+  const moraBase = loan.moraTipo === 'monto' ? loan.moraValor : installment.total * loan.moraValor / 100;
+  return moraBase * periodos;
+}
+
+function loanStatus(loan) {
+  if (loan.schedule.every(s => s.paid)) return 'paid';
+  const hoy = new Date();
+  return loan.schedule.some(s => { if (s.paid) return false; return new Date(fechaVencimiento(loan.fecha, s.month)) < hoy; }) ? 'mora' : 'active';
+}
+function calcularMoraTotal(loan) { return loan.schedule.reduce((a,s) => a + moraCuota(loan,s), 0); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.add('hidden'), 2600);
+}
+function showLoading(text) {
+  document.getElementById('loading-text').textContent = text || 'Procesando...';
+  const el = document.getElementById('loading'); el.classList.remove('hidden'); el.classList.add('flex');
+}
+function hideLoading() {
+  const el = document.getElementById('loading'); el.classList.add('hidden'); el.classList.remove('flex');
+}
+
+/* =================== NAVEGACION =================== */
+function navigate(view, loanId) {
+  state.currentView = view;
+  if (loanId !== undefined) state.currentLoanId = loanId;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const nav = document.querySelector(`.nav-item[data-nav="${view}"]`);
+  if (nav) nav.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  render(view);
+}
+function render(view) {
+  switch(view) {
+    case 'dashboard': renderDashboard(); startSlideshow(); break;
+    case 'loans': renderLoans(); break;
+    case 'cobros': renderCobros(); break;
+    case 'new-loan': renderNewLoanForm(); break;
+    case 'config': renderConfigForm(); break;
+    case 'loan-detail': renderLoanDetail(); break;
+  }
+  if (view !== 'dashboard') stopSlideshow();
+}
+
+/* =================== SLIDESHOW (bucle infinito) =================== */
+const SLIDE_COUNT = ADS.length;
+
+function renderSlides() {
+  const container = document.getElementById('slides-container');
+  const dotsContainer = document.getElementById('slide-dots');
+  if (!container || !dotsContainer) return;
+  let slidesHTML = '';
+  let dotsHTML = '';
+  ADS.forEach((ad, i) => {
+    slidesHTML += `<div class="slide" onclick="openAd(${i})" style="cursor:pointer"><img src="${ad.src}" alt="Publicidad ${i+1}"></div>`;
+    dotsHTML += `<button onclick="goToSlide(${i})" class="slide-dot${i === 0 ? ' active' : ''}"></button>`;
+  });
+  // Clone del primer slide para bucle infinito
+  slidesHTML += `<div class="slide" onclick="openAd(0)" style="cursor:pointer"><img src="${ADS[0].src}" alt="Publicidad 1"></div>`;
+  container.innerHTML = slidesHTML;
+  dotsContainer.innerHTML = dotsHTML;
+}
+
+function openAd(idx) {
+  const ad = ADS[idx];
+  if (!ad) return;
+  if (ad.share) {
+    window.open('https://wa.me/?text=' + encodeURIComponent(ad.msg), '_blank');
+  } else {
+    window.open('https://wa.me/' + ad.wa + '?text=' + encodeURIComponent(ad.msg), '_blank');
+  }
+}
+
+function openAdH(idx) {
+  const ad = ADS_H[idx];
+  if (!ad) return;
+  if (ad.share) {
+    window.open('https://wa.me/?text=' + encodeURIComponent(ad.msg), '_blank');
+  } else {
+    window.open('https://wa.me/' + ad.wa + '?text=' + encodeURIComponent(ad.msg), '_blank');
+  }
+}
+
+function horizontalAdHTML(idx) {
+  const ad = ADS_H[idx];
+  if (!ad) return '';
+  return `<div class="card overflow-hidden my-2 cursor-pointer active:scale-95 transition" onclick="openAdH(${idx})"><img src="${ad.src}" alt="Publicidad" class="w-full block" style="aspect-ratio:16/9;object-fit:cover"></div>`;
+}
+
+function startSlideshow() {
+  renderSlides();
+  stopSlideshow();
+  if (state.slideshowPaused) return;
+  state.slideTimer = setInterval(nextSlide, 4000);
+}
+function stopSlideshow() {
+  if (state.slideTimer) { clearInterval(state.slideTimer); state.slideTimer = null; }
+}
+function nextSlide() {
+  state.slideIndex++;
+  updateSlidePosition();
+  if (state.slideIndex >= SLIDE_COUNT) {
+    setTimeout(() => {
+      const c = document.getElementById('slides-container');
+      if (!c) return;
+      c.classList.add('no-transition');
+      state.slideIndex = 0;
+      c.style.transform = 'translateX(0%)';
+      void c.offsetWidth;
+      c.classList.remove('no-transition');
+    }, 520);
+  }
+}
+function updateSlidePosition() {
+  const c = document.getElementById('slides-container');
+  if (c) {
+    c.style.transform = `translateX(-${state.slideIndex * 100}%)`;
+    const dotIdx = state.slideIndex % SLIDE_COUNT;
+    document.querySelectorAll('.slide-dot').forEach((d,i) => d.classList.toggle('active', i === dotIdx));
+  }
+}
+function goToSlide(i) {
+  state.slideIndex = i;
+  updateSlidePosition();
+  startSlideshow();
+}
+function togglePauseSlideshow() {
+  if (state.slideshowPaused) resumeSlideshow();
+  else pauseSlideshow();
+}
+function pauseSlideshow() {
+  state.slideshowPaused = true;
+  stopSlideshow();
+  document.getElementById('pause-icon').innerHTML = '<polygon points="6,4 20,12 6,20"/>';
+  if (state.pauseTimeout) clearTimeout(state.pauseTimeout);
+  state.pauseTimeout = setTimeout(() => resumeSlideshow(), 20000);
+  toast('Pausado 20 segundos');
+}
+function resumeSlideshow() {
+  state.slideshowPaused = false;
+  if (state.pauseTimeout) { clearTimeout(state.pauseTimeout); state.pauseTimeout = null; }
+  document.getElementById('pause-icon').innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+  startSlideshow();
+}
+
+/* =================== DASHBOARD =================== */
+function renderDashboard() {
+  const configOk = state.config.prestamistas.length > 0 && state.config.tasas.interes > 0;
+  document.getElementById('dash-welcome').style.display = configOk ? 'none' : 'block';
+
+  let totalPrestado=0, porCobrar=0, interesesGanados=0, moraTotal=0, capitalRecuperado=0;
+  state.loans.forEach(loan => {
+    if (loanStatus(loan) !== 'paid') totalPrestado += loan.monto;
+    moraTotal += calcularMoraTotal(loan);
+    loan.schedule.forEach(s => { if (s.paid) { interesesGanados += s.interes; capitalRecuperado += s.capital; } else { porCobrar += s.total; } });
+  });
+  document.getElementById('stat-prestado').textContent = fmt(totalPrestado);
+  document.getElementById('stat-cobrar').textContent = fmt(porCobrar + moraTotal);
+  document.getElementById('stat-intereses').textContent = fmt(interesesGanados);
+  document.getElementById('stat-mora').textContent = fmt(moraTotal);
+
+  if (state.chartInstance) { state.chartInstance.destroy(); state.chartInstance = null; }
+  const cc = document.getElementById('chart-container');
+  const dataExist = totalPrestado>0 || capitalRecuperado>0 || interesesGanados>0;
+  if (dataExist) {
+    cc.innerHTML = '<canvas id="chart-distribucion"></canvas>';
+    state.chartInstance = new Chart(document.getElementById('chart-distribucion'), {
+      type: 'doughnut',
+      data: { labels:['Capital activo','Capital recuperado','Intereses'], datasets:[{ data:[totalPrestado,capitalRecuperado,interesesGanados], backgroundColor:['#0F766E','#14B8A6','#F59E0B'], borderWidth:0 }] },
+      options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{ font:{family:'Montserrat',size:11}, padding:12, usePointStyle:true } } }, cutout:'62%' }
+    });
+  } else {
+    cc.innerHTML = '<div class="h-44 flex items-center justify-center text-slate-400 text-sm text-center">Aun no tienes prestamos registrados.<br>Crea tu primer prestamo.</div>';
+  }
+
+  const recientes = [...state.loans].slice(-5).reverse();
+  document.getElementById('dash-loans').innerHTML = recientes.length === 0
+    ? '<div class="card p-5 text-center text-slate-400 text-sm">No hay prestamos registrados.</div>'
+    : recientes.map(l => loanCardHTML(l)).join('');
+  // Anuncio horizontal en el dashboard
+  const dashAdIdx = Math.floor(Math.random() * ADS_H.length);
+  document.getElementById('dash-ad-h').innerHTML = horizontalAdHTML(dashAdIdx);
+}
+
+function loanCardHTML(loan) {
+  const status = loanStatus(loan);
+  const pagadas = loan.schedule.filter(s => s.paid).length;
+  const pct = Math.round(pagadas / loan.schedule.length * 100);
+  const porCobrar = loan.schedule.filter(s => !s.paid).reduce((a,s) => a + s.total, 0) + calcularMoraTotal(loan);
+  const badge = { active:'<span class="text-[10px] bg-primary-light text-primary-dark px-2 py-0.5 rounded-full font-semibold">Activo</span>', mora:'<span class="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold">Con mora</span>', paid:'<span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Pagado</span>' }[status];
+  return `<div class="card p-4" onclick="navigate('loan-detail', ${loan.id})"><div class="flex justify-between items-start mb-2"><div><p class="font-semibold text-sm">${loan.prestatario.nombre}</p><p class="text-xs text-slate-400">DNI: ${loan.prestatario.dni} | ${fmtDate(loan.fecha)}</p></div>${badge}</div><div class="flex justify-between text-xs text-slate-500 mb-2"><span>Prestado: <b class="text-slate-700">${fmt(loan.monto)}</b></span><span>Por cobrar: <b class="text-accent-dark">${fmt(porCobrar)}</b></span></div><div class="progress-bar"><div style="width:${pct}%"></div></div><p class="text-[11px] text-slate-400 mt-1.5">${pagadas}/${loan.schedule.length} cuotas</p></div>`;
+}
+
+/* =================== PRESTAMOS =================== */
+function renderLoans() {
+  let list = state.filter === 'all' ? state.loans : state.loans.filter(l => loanStatus(l) === state.filter);
+  list = [...list].reverse();
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = b.dataset.filter === state.filter ? 'filter-btn btn-primary px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap' : 'filter-btn bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-slate-600';
+  });
+  if (list.length === 0) {
+    document.getElementById('loans-list').innerHTML = '<div class="card p-8 text-center text-slate-400 text-sm">No hay prestamos en esta categoria.</div>';
+    return;
+  }
+  let html = '';
+  let adIdx = 0;
+  list.forEach((l, i) => {
+    html += loanCardHTML(l);
+    // Insertar anuncio horizontal cada 3 prestamos
+    if ((i + 1) % 3 === 0 && i < list.length - 1) {
+      html += horizontalAdHTML(adIdx % ADS_H.length);
+      adIdx++;
+    }
+  });
+  document.getElementById('loans-list').innerHTML = html;
+}
+document.querySelectorAll('.filter-btn').forEach(b => b.addEventListener('click', () => { state.filter = b.dataset.filter; renderLoans(); }));
+
+/* =================== COBROS =================== */
+function renderCobros() {
+  const hoy = new Date();
+  const en7 = new Date(hoy.getTime() + 7*86400000);
+  const vencidos=[], proximos=[], pagados=[];
+  state.loans.forEach(loan => {
+    loan.schedule.forEach((s, idx) => {
+      const venc = new Date(fechaVencimiento(loan.fecha, s.month));
+      const mora = moraCuota(loan, s);
+      const item = { loan, s, idx, venc, mora };
+      if (s.paid) pagados.push({ ...item, fechaPago: s.fechaPago });
+      else if (venc < hoy) vencidos.push(item);
+      else if (venc <= en7) proximos.push(item);
+    });
+  });
+  vencidos.sort((a,b) => a.venc - b.venc);
+  proximos.sort((a,b) => a.venc - b.venc);
+  pagados.sort((a,b) => new Date(b.fechaPago) - new Date(a.fechaPago));
+
+  const itemHTML = item => `<div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0" onclick="navigate('loan-detail', ${item.loan.id})"><div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${item.loan.prestatario.nombre}</p><p class="text-[11px] text-slate-400">Cuota ${item.s.month} | Vence: ${fmtDate(item.venc)}</p>${item.mora > 0 ? `<p class="text-[11px] text-red-500">Mora: ${fmt(item.mora)} (${diasEntre(item.venc,hoy)} dias)</p>` : ''}</div><p class="font-bold text-sm ml-2">${fmt(item.s.total + item.mora)}</p></div>`;
+  const pagHTML = item => `<div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0" onclick="navigate('loan-detail', ${item.loan.id})"><div class="flex-1 min-w-0"><p class="text-sm font-semibold truncate">${item.loan.prestatario.nombre}</p><p class="text-[11px] text-slate-400">Cuota ${item.s.month} | Pagado: ${fmtDate(item.fechaPago)}</p></div><p class="font-bold text-sm text-emerald-600 ml-2">${fmt(item.s.total)}</p></div>`;
+
+  document.getElementById('cobros-vencidos').innerHTML = vencidos.length ? vencidos.map(itemHTML).join('') : '<p class="text-xs text-slate-400 py-2">Sin cuotas vencidas.</p>';
+  document.getElementById('cobros-proximos').innerHTML = proximos.length ? proximos.map(itemHTML).join('') : '<p class="text-xs text-slate-400 py-2">Sin cobros proximos.</p>';
+  // Anuncio horizontal entre secciones
+  const adIdx = Math.floor(Math.random() * ADS_H.length);
+  document.getElementById('cobros-ad-1').innerHTML = horizontalAdHTML(adIdx);
+  document.getElementById('cobros-pagados').innerHTML = pagados.length ? pagados.slice(0,10).map(pagHTML).join('') : '<p class="text-xs text-slate-400 py-2">Sin pagos registrados.</p>';
+}
+
+/* =================== NUEVO PRESTAMO =================== */
+function renderNewLoanForm() {
+  const has = state.config.prestamistas.length > 0;
+  document.getElementById('no-prestamista-warning').classList.toggle('hidden', has);
+  document.getElementById('form-loan').classList.toggle('hidden', !has);
+  if (!has) return;
+
+  const sel = document.getElementById('sel-prestamista');
+  sel.innerHTML = '<option value="">Selecciona un prestamista</option>' + state.config.prestamistas.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+  const fi = document.getElementById('loan-fecha');
+  if (!fi.value) fi.value = todayISO();
+  const t = state.config.tasas;
+  setInteresTipo(t.interesTipo || 'porcentaje');
+  document.getElementById('interes').value = t.interes || '';
+  setMoraTipo(t.moraTipo || 'porcentaje');
+  document.getElementById('moraValor').value = t.mora || '';
+  document.getElementById('moraPeriodo').value = t.moraPeriodo || 'diario';
+  if (t.moraN) document.getElementById('moraN').value = t.moraN;
+  toggleMoraN();
+  actualizarMoraDesc();
+}
+
+function setInteresTipo(tipo) {
+  state.interesTipoPreview = tipo;
+  document.getElementById('interesTipo').value = tipo;
+  document.getElementById('btn-interes-pct').classList.toggle('active', tipo === 'porcentaje');
+  document.getElementById('btn-interes-monto').classList.toggle('active', tipo === 'monto');
+  document.getElementById('interes').placeholder = tipo === 'monto' ? '60.00' : '20';
+  actualizarPreview();
+}
+function setMoraTipo(tipo) {
+  state.moraTipoPreview = tipo;
+  document.getElementById('moraTipo').value = tipo;
+  document.getElementById('btn-mora-pct').classList.toggle('active', tipo === 'porcentaje');
+  document.getElementById('btn-mora-monto').classList.toggle('active', tipo === 'monto');
+  document.getElementById('moraValor').placeholder = tipo === 'monto' ? '2.00' : '5';
+  actualizarMoraDesc();
+}
+function toggleMoraN() {
+  document.getElementById('mora-n-field').classList.toggle('hidden', document.getElementById('moraPeriodo').value !== 'cada_n_dias');
+  actualizarMoraDesc();
+}
+function actualizarMoraDesc() {
+  const p = document.getElementById('moraPeriodo').value;
+  const t = state.moraTipoPreview;
+  const map = { diario: t==='monto'?'Monto fijo por cada dia de retraso.':'Porcentaje por cada dia de retraso.', semanal: t==='monto'?'Monto fijo por cada semana de retraso.':'Porcentaje por cada semana de retraso.', quincenal: t==='monto'?'Monto fijo cada 15 dias de retraso.':'Porcentaje cada 15 dias de retraso.', mensual: t==='monto'?'Monto fijo por cada mes de retraso.':'Porcentaje por cada mes de retraso.', cada_n_dias: t==='monto'?'Monto fijo cada N dias de retraso.':'Porcentaje cada N dias de retraso.' };
+  document.getElementById('mora-desc').textContent = map[p] || '';
+}
+function toggleGarante() {
+  state.garanteOn = !state.garanteOn;
+  document.getElementById('toggle-garante').classList.toggle('on', state.garanteOn);
+  document.getElementById('garante-fields').classList.toggle('hidden', !state.garanteOn);
+}
+function actualizarPreview() {
+  const monto = parseFloat(document.getElementById('monto').value) || 0;
+  const plazo = parseInt(document.getElementById('plazo').value) || 0;
+  const interes = parseFloat(document.getElementById('interes').value) || 0;
+  const card = document.getElementById('preview-card');
+  if (monto > 0 && plazo > 0) {
+    const im = calcularInteresMensual(monto, interes, state.interesTipoPreview);
+    const cf = im + monto;
+    const total = im * (plazo-1) + cf;
+    document.getElementById('prev-cuota').textContent = fmt(im);
+    document.getElementById('prev-final').textContent = fmt(cf);
+    document.getElementById('prev-total').textContent = fmt(total);
+    document.getElementById('prev-ganancia').textContent = fmt(total - monto);
+    card.classList.remove('hidden');
+  } else card.classList.add('hidden');
+}
+
+document.getElementById('form-loan').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd);
+  const prestamista = state.config.prestamistas.find(p => String(p.id) === String(data.prestamistaId));
+  if (!prestamista) { toast('Selecciona un prestamista'); return; }
+  const monto = parseFloat(data.monto), plazo = parseInt(data.plazo), interes = parseFloat(data.interes), moraValor = parseFloat(data.moraValor);
+  if (monto <= 0 || plazo <= 0) { toast('Monto y plazo deben ser mayores a 0'); return; }
+  if (!data.telefono || data.telefono.trim().length < 6) { toast('Ingresa el telefono del prestatario'); return; }
+  const moraN = data.moraPeriodo === 'cada_n_dias' ? (parseInt(data.moraN) || 1) : 1;
+  const loan = {
+    id: Date.now(), fecha: new Date(data.fecha + 'T12:00:00').toISOString(),
+    prestamista: { nombre:prestamista.nombre, dni:prestamista.dni, direccion:prestamista.direccion, telefono:prestamista.telefono||'', genero:prestamista.genero||'m' },
+    prestatario: { nombre:data.nombre.trim(), dni:data.dni.trim(), direccion:data.direccion.trim(), genero:data.genero, telefono:data.telefono.trim() },
+    garante: state.garanteOn && data.garanteNombre ? { nombre:data.garanteNombre.trim(), dni:data.garanteDni.trim(), direccion:data.garanteDireccion.trim(), genero:data.garanteGenero } : null,
+    monto, plazo, interesTipo:data.interesTipo, tasaInteres:interes, moraTipo:data.moraTipo, moraValor, moraPeriodo:data.moraPeriodo, moraN,
+    schedule: calcularCronograma(monto, interes, data.interesTipo, plazo)
+  };
+  state.loans.push(loan);
+  await saveState();
+  e.target.reset();
+  state.garanteOn = false;
+  document.getElementById('toggle-garante').classList.remove('on');
+  document.getElementById('garante-fields').classList.add('hidden');
+  document.getElementById('preview-card').classList.add('hidden');
+  toast('Prestamo creado correctamente');
+  setTimeout(() => navigate('loan-detail', loan.id), 400);
+});
+
+/* =================== CONFIG =================== */
+function renderConfigForm() {
+  renderPrestamistas();
+  const f = document.getElementById('form-config');
+  const t = state.config.tasas;
+  setCfgInteresTipo(t.interesTipo || 'porcentaje'); f.interes.value = t.interes || '';
+  setCfgMoraTipo(t.moraTipo || 'porcentaje'); f.moraValor.value = t.mora || '';
+  f.moraPeriodo.value = t.moraPeriodo || 'diario';
+  if (t.moraN) f.moraN.value = t.moraN;
+  toggleCfgMoraN();
+  f.razonSocial.value = state.config.empresa.razonSocial;
+  f.ruc.value = state.config.empresa.ruc;
+  state.empresaOn = state.config.empresa.enabled;
+  document.getElementById('toggle-empresa').classList.toggle('on', state.empresaOn);
+  document.getElementById('empresa-fields').classList.toggle('hidden', !state.empresaOn);
+}
+function setCfgInteresTipo(tipo) {
+  state.interesTipoPreview = tipo;
+  document.getElementById('cfgInteresTipo').value = tipo;
+  document.getElementById('btn-cfg-interes-pct').classList.toggle('active', tipo === 'porcentaje');
+  document.getElementById('btn-cfg-interes-monto').classList.toggle('active', tipo === 'monto');
+  document.getElementById('cfgInteres').placeholder = tipo === 'monto' ? '60.00' : '20';
+}
+function setCfgMoraTipo(tipo) {
+  state.moraTipoPreview = tipo;
+  document.getElementById('cfgMoraTipo').value = tipo;
+  document.getElementById('btn-cfg-mora-pct').classList.toggle('active', tipo === 'porcentaje');
+  document.getElementById('btn-cfg-mora-monto').classList.toggle('active', tipo === 'monto');
+  document.getElementById('cfgMoraValor').placeholder = tipo === 'monto' ? '2.00' : '5';
+}
+function toggleCfgMoraN() { document.getElementById('cfg-mora-n-field').classList.toggle('hidden', document.getElementById('cfgMoraPeriodo').value !== 'cada_n_dias'); }
+
+function renderPrestamistas() {
+  const cont = document.getElementById('prestamistas-list');
+  if (state.config.prestamistas.length === 0) { cont.innerHTML = '<p class="text-xs text-slate-400 text-center py-3">No hay prestamistas. Agrega uno.</p>'; return; }
+  cont.innerHTML = state.config.prestamistas.map(p => `<div class="flex items-start justify-between p-3 bg-slate-50 rounded-xl"><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${p.nombre}</p><p class="text-[11px] text-slate-400">DNI: ${p.dni}${p.telefono?' | Tel: '+p.telefono:''}</p><p class="text-[11px] text-slate-400 truncate">${p.direccion}</p></div><div class="flex gap-1 ml-2"><button onclick="editarPrestamista(${p.id})" class="text-primary p-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"/></svg></button><button onclick="eliminarPrestamista(${p.id})" class="text-red-500 p-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg></button></div></div>`).join('');
+}
+function toggleFormPrestamista() {
+  const f = document.getElementById('form-prestamista');
+  if (f.classList.contains('hidden')) { cancelarFormPrestamista(); f.classList.remove('hidden'); }
+  else f.classList.add('hidden');
+}
+function cancelarFormPrestamista() {
+  ['editId','pNombre','pDni','pTel','pDir'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pGenero').value = 'm';
+  state.editingPrestamistaId = null;
+}
+async function guardarPrestamista() {
+  const nombre = document.getElementById('pNombre').value.trim();
+  const dni = document.getElementById('pDni').value.trim();
+  const tel = document.getElementById('pTel').value.trim();
+  const dir = document.getElementById('pDir').value.trim();
+  const genero = document.getElementById('pGenero').value;
+  if (!nombre || !dni || !dir) { toast('Completa nombre, DNI y direccion'); return; }
+  if (state.editingPrestamistaId) {
+    const p = state.config.prestamistas.find(x => x.id === state.editingPrestamistaId);
+    if (p) { p.nombre=nombre; p.dni=dni; p.telefono=tel; p.direccion=dir; p.genero=genero; }
+  } else {
+    state.config.prestamistas.push({ id:Date.now(), nombre, dni, telefono:tel, direccion:dir, genero });
+  }
+  await saveState();
+  cancelarFormPrestamista();
+  document.getElementById('form-prestamista').classList.add('hidden');
+  renderPrestamistas();
+  toast('Prestamista guardado');
+}
+function editarPrestamista(id) {
+  const p = state.config.prestamistas.find(x => x.id === id);
+  if (!p) return;
+  state.editingPrestamistaId = id;
+  document.getElementById('pNombre').value = p.nombre;
+  document.getElementById('pDni').value = p.dni;
+  document.getElementById('pTel').value = p.telefono || '';
+  document.getElementById('pDir').value = p.direccion;
+  document.getElementById('pGenero').value = p.genero || 'm';
+  document.getElementById('form-prestamista').classList.remove('hidden');
+}
+async function eliminarPrestamista(id) {
+  if (!confirm('Eliminar este prestamista?')) return;
+  state.config.prestamistas = state.config.prestamistas.filter(p => p.id !== id);
+  await saveState();
+  renderPrestamistas();
+  toast('Prestamista eliminado');
+}
+function toggleEmpresa() {
+  state.empresaOn = !state.empresaOn;
+  document.getElementById('toggle-empresa').classList.toggle('on', state.empresaOn);
+  document.getElementById('empresa-fields').classList.toggle('hidden', !state.empresaOn);
+}
+
+document.getElementById('form-config').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd);
+  state.config.tasas = { interesTipo:data.interesTipo, interes:parseFloat(data.interes)||0, moraTipo:data.moraTipo, mora:parseFloat(data.moraValor)||0, moraPeriodo:data.moraPeriodo, moraN:data.moraPeriodo==='cada_n_dias'?(parseInt(data.moraN)||1):1 };
+  state.config.empresa = { enabled:state.empresaOn, razonSocial:state.empresaOn?(data.razonSocial||'').trim():'', ruc:state.empresaOn?(data.ruc||'').trim():'' };
+  await saveState();
+  toast('Configuracion guardada');
+  setTimeout(() => navigate('dashboard'), 600);
+});
+
+async function limpiarDatos() {
+  if (confirm('Borrar todos los datos?')) {
+    await store.clear();
+    state.loans = [];
+    state.config = { prestamistas:[], tasas:{interesTipo:'porcentaje',interes:0,moraTipo:'porcentaje',mora:0,moraPeriodo:'diario',moraN:1}, empresa:{enabled:false,razonSocial:'',ruc:''} };
+    renderConfigForm();
+    toast('Datos borrados');
+  }
+}
+
+/* =================== DETALLE =================== */
+function renderLoanDetail() {
+  const loan = state.loans.find(l => l.id === state.currentLoanId);
+  if (!loan) { document.getElementById('detail-content').innerHTML = '<p class="text-sm text-slate-400">Prestamo no encontrado.</p>'; return; }
+  const status = loanStatus(loan);
+  const pagadas = loan.schedule.filter(s => s.paid).length;
+  const moraTotal = calcularMoraTotal(loan);
+  const porCobrar = loan.schedule.filter(s => !s.paid).reduce((a,s) => a + s.total, 0) + moraTotal;
+  const total = loan.schedule.reduce((a,s) => a + s.total, 0);
+  const pct = Math.round(pagadas / loan.schedule.length * 100);
+  const badge = { active:'<span class="text-[10px] bg-primary-light text-primary-dark px-2 py-0.5 rounded-full font-semibold">Activo</span>', mora:'<span class="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold">Con mora</span>', paid:'<span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Pagado</span>' }[status];
+  const interesLabel = loan.interesTipo === 'monto' ? fmt(loan.tasaInteres) + ' / mes' : loan.tasaInteres + '%';
+  const moraLabel = (loan.moraTipo === 'monto' ? fmt(loan.moraValor) : loan.moraValor + '%') + ' / ' + (loan.moraPeriodo === 'cada_n_dias' ? (loan.moraN + ' dias') : loan.moraPeriodo);
+
+  let html = `<div class="card p-5 mb-4"><div class="flex justify-between items-start mb-3"><div><h2 class="font-bold text-lg">${loan.prestatario.nombre}</h2><p class="text-xs text-slate-400">DNI: ${loan.prestatario.dni} | ${fmtDate(loan.fecha)}</p><p class="text-xs text-slate-400">${loan.prestatario.direccion}</p><p class="text-xs text-slate-400">Tel: ${loan.prestatario.telefono}</p><p class="text-[11px] text-slate-400 mt-1">Prestamista: ${loan.prestamista.nombre}</p></div>${badge}</div><div class="grid grid-cols-2 gap-3 text-xs mt-3"><div><p class="text-slate-500">Monto</p><p class="font-bold text-base">${fmt(loan.monto)}</p></div><div><p class="text-slate-500">Plazo</p><p class="font-bold text-base">${loan.plazo} meses</p></div><div><p class="text-slate-500">Interes</p><p class="font-bold text-base">${interesLabel}</p></div><div><p class="text-slate-500">Mora</p><p class="font-bold text-base">${moraLabel}</p></div><div><p class="text-slate-500">Total a devolver</p><p class="font-bold text-base text-accent-dark">${fmt(total)}</p></div><div><p class="text-slate-500">Por cobrar</p><p class="font-bold text-base text-red-500">${fmt(porCobrar)}</p></div></div><div class="mt-4"><div class="flex justify-between text-xs text-slate-500 mb-1"><span>Progreso</span><span>${pagadas}/${loan.schedule.length}</span></div><div class="progress-bar"><div style="width:${pct}%"></div></div></div></div>`;
+  if (loan.garante) html += `<div class="card p-4 mb-4"><h3 class="font-semibold text-sm text-slate-700 mb-2">Garante</h3><p class="text-sm">${loan.garante.nombre}</p><p class="text-xs text-slate-400">DNI: ${loan.garante.dni}</p><p class="text-xs text-slate-400">${loan.garante.direccion}</p></div>`;
+
+  html += `<div class="grid grid-cols-4 gap-2 mb-4">
+    <button onclick="verDocumento(${loan.id})" class="btn-secondary aspect-square rounded-xl flex items-center justify-center active:scale-95 transition" title="Ver documento">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+    </button>
+    <button onclick="descargarPDF(${loan.id})" class="btn-primary aspect-square rounded-xl flex items-center justify-center active:scale-95 transition" title="Descargar PDF">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+    </button>
+    <button onclick="compartirPDF(${loan.id})" class="bg-emerald-500 text-white aspect-square rounded-xl flex items-center justify-center active:scale-95 transition" title="Enviar por WhatsApp">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.88-9.881-9.882-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    </button>
+    <button onclick="eliminarPrestamo(${loan.id})" class="bg-red-50 text-red-600 border border-red-200 aspect-square rounded-xl flex items-center justify-center active:scale-95 transition" title="Eliminar">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+    </button>
+  </div><h3 class="font-bold text-base mb-3">Cronograma de pagos</h3><div class="space-y-2 mb-4">`;
+
+  loan.schedule.forEach((s, idx) => {
+    const venc = fmtDate(fechaVencimiento(loan.fecha, s.month));
+    const hoy = new Date();
+    const vencDate = new Date(fechaVencimiento(loan.fecha, s.month));
+    const vencido = !s.paid && vencDate < hoy;
+    const mora = moraCuota(loan, s);
+    const diasRetraso = vencido ? diasEntre(vencDate, hoy) : 0;
+    const eClass = s.paid ? 'bg-emerald-100 text-emerald-700' : (vencido ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-600');
+    const eText = s.paid ? 'Pagado' : (vencido ? 'Vencido (' + diasRetraso + 'd)' : 'Pendiente');
+    html += `<div class="card p-3"><div class="flex justify-between items-start"><div><p class="text-sm font-semibold">Cuota ${s.month}</p><p class="text-[11px] text-slate-400">Vence: ${venc}</p><p class="text-xs mt-1">Interes: ${fmt(s.interes)} ${s.capital > 0 ? '+ Capital: ' + fmt(s.capital) : ''}</p>${mora > 0 ? `<p class="text-xs text-red-500">Mora: ${fmt(mora)}</p>` : ''}</div><div class="text-right"><p class="font-bold text-sm">${fmt(s.total + mora)}</p><span class="text-[10px] ${eClass} px-2 py-0.5 rounded-full font-semibold mt-1 inline-block">${eText}</span></div></div><button onclick="togglePagado(${loan.id}, ${idx})" class="w-full mt-2.5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition ${s.paid ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600 border-2 border-slate-200'}">${s.paid ? '<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2.5\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m4.5 12.75 6 6 9-13.5\"/></svg>Pagado' + (s.fechaPago ? ' - ' + fmtDate(s.fechaPago) : '') + ' (desmarcar)' : '<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"w-4 h-4\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\"/></svg>Marcar como pagado'}</button></div>`;
+  });
+  html += '</div>';
+  document.getElementById('detail-content').innerHTML = html;
+}
+
+async function togglePagado(loanId, idx) {
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return;
+  const s = loan.schedule[idx];
+  s.paid = !s.paid;
+  if (s.paid) {
+    s.fechaPago = new Date().toISOString();
+    s.mora = 0;
+    toast('Cuota marcada como pagada');
+  } else {
+    s.fechaPago = null;
+    toast('Cuota desmarcada');
+  }
+  await saveState();
+  renderLoanDetail();
+}
+async function eliminarPrestamo(loanId) {
+  if (!confirm('Eliminar este prestamo?')) return;
+  state.loans = state.loans.filter(l => l.id !== loanId);
+  await saveState();
+  toast('Prestamo eliminado');
+  navigate('loans');
+}
+
+/* =================== FUENTE MONTSERRAT =================== */
+let montserratCache = null;
+async function loadMontserratFont() {
+  if (montserratCache) return montserratCache;
+  try {
+    const urls = { regular:'https://cdn.jsdelivr.net/gh/JulietaUla/Montserrat/fonts/ttf/Montserrat-Regular.ttf', bold:'https://cdn.jsdelivr.net/gh/JulietaUla/Montserrat/fonts/ttf/Montserrat-Bold.ttf', semiBold:'https://cdn.jsdelivr.net/gh/JulietaUla/Montserrat/fonts/ttf/Montserrat-SemiBold.ttf' };
+    const e = {};
+    for (const [k,u] of Object.entries(urls)) { const r = await fetch(u); if (!r.ok) throw new Error(k); e[k] = arrayBufferToBase64(await r.arrayBuffer()); }
+    montserratCache = e; return e;
+  } catch(e) { console.warn('Montserrat no disponible', e); return null; }
+}
+function arrayBufferToBase64(buf) { let b=''; const bytes=new Uint8Array(buf); for (let i=0;i<bytes.length;i+=0x8000) b+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000)); return btoa(b); }
+
+/* =================== PDF =================== */
+async function generarPDFDoc(loanId) {
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return null;
+  const font = await loadMontserratFont();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const pageW=210, pageH=297, margin=16, contentW=pageW-margin*2;
+  const fontName = font ? 'Montserrat' : 'helvetica';
+  if (font) {
+    doc.addFileToVFS('Montserrat-Regular.ttf', font.regular);
+    doc.addFileToVFS('Montserrat-Bold.ttf', font.bold);
+    doc.addFileToVFS('Montserrat-SemiBold.ttf', font.semiBold);
+    doc.addFont('Montserrat-Regular.ttf','Montserrat','normal');
+    doc.addFont('Montserrat-Bold.ttf','Montserrat','bold');
+    doc.addFont('Montserrat-SemiBold.ttf','Montserrat','semibold');
+  }
+  const colorPrim = [15,118,110]; // #0F766E
+  const colorPrimDark = [19,78,74];
+
+  function setFont(style,size) { doc.setFont(fontName, style||'normal'); doc.setFontSize(size||10); }
+  function textMixed(x,y,segments,size) { size=size||9; let cx=x; segments.forEach(s => { setFont(s.bold?'bold':'normal',size); doc.setTextColor(40,40,40); doc.text(s.text,cx,y); cx+=doc.getTextWidth(s.text); }); }
+  function sectionHeader(title,y) { setFont('bold',11); doc.setTextColor(...colorPrim); doc.text(title,margin,y); doc.setDrawColor(...colorPrim); doc.setLineWidth(0.6); doc.line(margin,y+1.5,pageW-margin,y+1.5); doc.setTextColor(40); return y+6; }
+
+  // Header bar
+  doc.setFillColor(...colorPrim); doc.rect(0,0,pageW,24,'F');
+  doc.setFillColor(...colorPrimDark); doc.rect(0,24,pageW,1.5,'F');
+  setFont('bold',15); doc.setTextColor(255,255,255);
+  doc.text('CONTRATO DE PRESTAMO DE DINERO', pageW/2, 11, { align:'center' });
+  setFont('normal',8); doc.setTextColor(230,230,230);
+  const sub = state.config.empresa.enabled && state.config.empresa.razonSocial ? state.config.empresa.razonSocial + ' - RUC ' + state.config.empresa.ruc : '';
+  if (sub) doc.text(sub, pageW/2, 17, { align:'center' });
+  doc.text('Fecha del contrato: ' + fmtDate(loan.fecha), pageW/2, sub?21:18, { align:'center' });
+
+  let y = 34;
+  y = sectionHeader('SECCION I  -  DE LAS PARTES', y);
+  const prestamistaGenero = loan.prestamista.genero || 'm';
+  setFont('bold',9); doc.setTextColor(...colorPrim); doc.text(generoArt(prestamistaGenero,true) + ' PRESTAMISTA', margin, y); y+=5; doc.setTextColor(40);
+  textMixed(margin,y,[{text:'Nombre: ',bold:false},{text:loan.prestamista.nombre,bold:true}]); y+=4.5;
+  textMixed(margin,y,[{text:'DNI: ',bold:false},{text:loan.prestamista.dni,bold:true}]); y+=4.5;
+  if (loan.prestamista.telefono) { textMixed(margin,y,[{text:'Telefono: ',bold:false},{text:loan.prestamista.telefono,bold:true}]); y+=4.5; }
+  textMixed(margin,y,[{text:'Direccion: ',bold:false},{text:loan.prestamista.direccion,bold:false}]); y+=4.5*Math.max(doc.splitTextToSize(loan.prestamista.direccion,contentW-20).length,1); y+=3;
+
+  const artP = generoArt(prestamistaGenero,false), artPrestat = generoArt(loan.prestatario.genero,true), sustP = termPrestatario(loan.prestatario.genero);
+  setFont('bold',9); doc.setTextColor(...colorPrim); doc.text(artPrestat + ' ' + sustP.toUpperCase(), margin, y); y+=5; doc.setTextColor(40);
+  textMixed(margin,y,[{text:'Nombre: ',bold:false},{text:loan.prestatario.nombre,bold:true}]); y+=4.5;
+  textMixed(margin,y,[{text:'DNI: ',bold:false},{text:loan.prestatario.dni,bold:true}]); y+=4.5;
+  if (loan.prestatario.telefono) { textMixed(margin,y,[{text:'Telefono: ',bold:false},{text:loan.prestatario.telefono,bold:true}]); y+=4.5; }
+  textMixed(margin,y,[{text:'Direccion: ',bold:false},{text:loan.prestatario.direccion,bold:false}]); y+=4.5*Math.max(doc.splitTextToSize(loan.prestatario.direccion,contentW-20).length,1); y+=3;
+
+  if (loan.garante) {
+    const artGar = generoArt(loan.garante.genero,true);
+    setFont('bold',9); doc.setTextColor(...colorPrim); doc.text(artGar + ' GARANTE', margin, y); y+=5; doc.setTextColor(40);
+    textMixed(margin,y,[{text:'Nombre: ',bold:false},{text:loan.garante.nombre,bold:true}]); y+=4.5;
+    textMixed(margin,y,[{text:'DNI: ',bold:false},{text:loan.garante.dni,bold:true}]); y+=4.5;
+    textMixed(margin,y,[{text:'Direccion: ',bold:false},{text:loan.garante.direccion,bold:false}]); y+=4.5*Math.max(doc.splitTextToSize(loan.garante.direccion,contentW-20).length,1); y+=3;
+  }
+
+  if (y > 230) { doc.addPage(); y=24; }
+  y = sectionHeader('SECCION II  -  DEL OBJETO', y);
+  setFont('normal',9); doc.setTextColor(40);
+  const aArt = loan.prestatario.genero === 'f' ? 'a la ' : 'al ';
+  const objText = artP + ' prestamista entrega en calidad de prestamo ' + aArt + sustP + ' la suma de ' + fmt(loan.monto) + ' (' + numeroAPalabras(loan.monto) + ' soles), dinero que ' + artPrestat.toLowerCase() + ' ' + sustP + ' recibe en este acto.';
+  doc.splitTextToSize(objText, contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=3;
+
+  if (y > 250) { doc.addPage(); y=24; }
+  y = sectionHeader('SECCION III  -  DEL PLAZO, INTERES Y MORA', y);
+  setFont('normal',9); doc.setTextColor(40);
+  doc.splitTextToSize('El plazo del prestamo es de ' + loan.plazo + ' meses, contados desde el ' + fmtDate(loan.fecha) + '.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=2;
+  const interesMensual = calcularInteresMensual(loan.monto, loan.tasaInteres, loan.interesTipo);
+  const interesDesc = loan.interesTipo === 'monto' ? 'una cantidad fija de ' + fmt(loan.tasaInteres) + ' mensuales' : 'un interes mensual del ' + loan.tasaInteres + '%';
+  doc.splitTextToSize('Se pacta ' + interesDesc + ' sobre el capital prestado, equivalente a ' + fmt(interesMensual) + ' por mes.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=2;
+  const moraPeriodoDesc = loan.moraPeriodo === 'cada_n_dias' ? 'cada ' + loan.moraN + ' dias' : loan.moraPeriodo;
+  const moraDesc2 = loan.moraTipo === 'monto' ? fmt(loan.moraValor) : 'el ' + loan.moraValor + '% de la cuota';
+  doc.splitTextToSize('En caso de mora, se aplicara un recargo de ' + moraDesc2 + ' ' + moraPeriodoDesc + ' de retraso sobre la cuota vencida.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=3;
+
+  if (y > 240) { doc.addPage(); y=24; }
+  y = sectionHeader('SECCION IV  -  DE LA FORMA DE PAGO', y);
+  setFont('normal',9); doc.setTextColor(40);
+  const cuotaFinal = interesMensual + loan.monto;
+  const totalDevolver = interesMensual * (loan.plazo-1) + cuotaFinal;
+  doc.splitTextToSize(artPrestat.toLowerCase() + ' ' + sustP + ' pagara mensualmente la suma de ' + fmt(interesMensual) + ' por concepto de intereses durante los primeros ' + (loan.plazo-1) + ' meses. En el mes ' + loan.plazo + ' pagara ' + fmt(cuotaFinal) + ', que incluye el interes del mes y la devolucion del capital. El total a devolver es ' + fmt(totalDevolver) + '.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=3;
+
+  if (loan.garante) {
+    if (y > 250) { doc.addPage(); y=24; }
+    y = sectionHeader('SECCION V  -  DE LA GARANTIA', y);
+    setFont('normal',9); doc.setTextColor(40);
+    const artGarC = generoArt(loan.garante.genero,false);
+    const deArt = loan.prestatario.genero === 'f' ? 'de la ' : 'del ';
+    doc.splitTextToSize(artGarC + ' garante se constituye en fiador solidario y mancomunado ' + deArt + sustP + ', obligandose a responder por el pago total del prestamo en caso de incumplimiento.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=3;
+  }
+
+  if (y > 200) { doc.addPage(); y=24; }
+  const crNum = loan.garante ? 'VI' : 'V';
+  y = sectionHeader('SECCION ' + crNum + '  -  CRONOGRAMA DE PAGOS', y);
+  doc.autoTable({ startY:y, head:[['Mes','Vencimiento','Interes','Capital','Cuota']], body:loan.schedule.map(s => [s.month, fmtDate(fechaVencimiento(loan.fecha,s.month)), fmt(s.interes), s.capital>0?fmt(s.capital):'-', fmt(s.total)]), theme:'striped', headStyles:{ fillColor:colorPrim, textColor:255, fontSize:9, font:fontName, fontStyle:'bold' }, bodyStyles:{ fontSize:9, font:fontName, fontStyle:'normal', textColor:40 }, alternateRowStyles:{ fillColor:[248,250,252] }, margin:{ left:margin, right:margin } });
+  y = doc.lastAutoTable.finalY + 12;
+
+  if (y > 235) { doc.addPage(); y=24; }
+  const fNum = loan.garante ? 'VII' : 'VI';
+  y = sectionHeader('SECCION ' + fNum + '  -  DE LAS FIRMAS', y);
+  setFont('normal',9); doc.setTextColor(60);
+  doc.splitTextToSize('En senal de aceptacion, las partes firman el presente contrato en la fecha indicada.', contentW).forEach(l => { doc.text(l,margin,y); y+=4.5; }); y+=8;
+
+  const fY = y+8, mitad = pageW/2;
+  doc.setDrawColor(80); doc.setLineWidth(0.3);
+  doc.line(margin+10,fY,mitad-8,fY); setFont('normal',8); doc.setTextColor(60); doc.text('Firma ' + (prestamistaGenero === 'f' ? 'de la ' : 'del ') + 'Prestamista',margin+10,fY+4); setFont('bold',8); doc.text(loan.prestamista.nombre,margin+10,fY+8); doc.text('DNI: '+loan.prestamista.dni,margin+10,fY+11.5);
+  doc.line(mitad+8,fY,pageW-margin-10,fY); setFont('normal',8);
+  doc.text('Firma ' + (loan.prestatario.genero==='f'?'de la ':'del ') + (loan.prestatario.genero==='f'?'Prestataria':'Prestatario'), mitad+8, fY+4); setFont('bold',8); doc.text(loan.prestatario.nombre,mitad+8,fY+8); doc.text('DNI: '+loan.prestatario.dni,mitad+8,fY+11.5);
+  if (loan.garante) {
+    const fY2 = fY+22; doc.line(mitad-35,fY2,mitad+35,fY2); setFont('normal',8);
+    doc.text('Firma ' + (loan.garante.genero==='f'?'de la ':'del ') + 'Garante', mitad-35, fY2+4); setFont('bold',8); doc.text(loan.garante.nombre,mitad-35,fY2+8); doc.text('DNI: '+loan.garante.dni,mitad-35,fY2+11.5);
+  }
+
+  // Marca de agua simple en cada pagina
+  const pc = doc.internal.getNumberOfPages();
+  for (let i=1; i<=pc; i++) {
+    doc.setPage(i);
+    const stripY = pageH - 8;
+    doc.setFillColor(...colorPrim);
+    doc.rect(0, stripY, pageW, 8, 'F');
+    setFont('normal',7); doc.setTextColor(255,255,255);
+    doc.text('Contrato Generado por Kuotik: +51 933 844 790', pageW/2, stripY+5, { align:'center' });
+  }
+  return doc;
+}
+
+async function descargarPDF(loanId) {
+  showLoading('Cargando fuente...');
+  try {
+    const doc = await generarPDFDoc(loanId);
+    if (!doc) { hideLoading(); return; }
+    const loan = state.loans.find(l => l.id === loanId);
+    doc.save('contrato_' + loan.prestatario.nombre.replace(/\s+/g,'_').toLowerCase() + '_' + loanId + '.pdf');
+    toast('Contrato descargado');
+  } catch(e) { console.error(e); toast('Error al generar PDF'); }
+  hideLoading();
+}
+async function verDocumento(loanId) {
+  showLoading('Generando documento...');
+  try {
+    const doc = await generarPDFDoc(loanId);
+    if (!doc) { hideLoading(); return; }
+    const blob = doc.output('blob');
+    if (state.currentPdfBlobUrl) URL.revokeObjectURL(state.currentPdfBlobUrl);
+    state.currentPdfBlobUrl = URL.createObjectURL(blob);
+    document.getElementById('pdf-frame').src = state.currentPdfBlobUrl;
+    document.getElementById('pdf-modal').classList.remove('hidden');
+    document.getElementById('pdf-modal').classList.add('flex');
+  } catch(e) { console.error(e); toast('Error'); }
+  hideLoading();
+}
+function cerrarVisor() {
+  document.getElementById('pdf-modal').classList.add('hidden');
+  document.getElementById('pdf-modal').classList.remove('flex');
+  document.getElementById('pdf-frame').src = '';
+  if (state.currentPdfBlobUrl) { URL.revokeObjectURL(state.currentPdfBlobUrl); state.currentPdfBlobUrl = null; }
+}
+function descargarDesdeVisor() { if (state.currentLoanId) descargarPDF(state.currentLoanId); }
+async function compartirPDF(loanId) {
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return;
+  showLoading('Preparando documento...');
+  try {
+    const doc = await generarPDFDoc(loanId);
+    if (!doc) { hideLoading(); return; }
+    const blob = doc.output('blob');
+    const fileName = 'contrato_' + loan.prestatario.nombre.replace(/\s+/g,'_').toLowerCase() + '.pdf';
+    const file = new File([blob], fileName, { type:'application/pdf' });
+    if (navigator.share) {
+      const sd = { title:'Contrato de prestamo', text:'Te envio el contrato del prestamo.' };
+      if (navigator.canShare && navigator.canShare({ files:[file] })) sd.files = [file];
+      await navigator.share(sd);
+      toast('Compartido');
+    } else {
+      doc.save(fileName);
+      const tel = (loan.prestatario.telefono||'').replace(/[^0-9]/g,'');
+      const msg = 'Hola ' + loan.prestatario.nombre + ', te envio el contrato del prestamo.';
+      window.open(tel ? 'https://wa.me/'+tel+'?text='+encodeURIComponent(msg) : 'https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+      toast('PDF descargado. Adjuntalo en WhatsApp.');
+    }
+  } catch(e) { if (e.name !== 'AbortError') { console.error(e); toast('Error'); } }
+  hideLoading();
+}
+
+function numeroAPalabras(n) {
+  n = Math.floor(n);
+  if (n === 0) return 'cero';
+  const u=['','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
+  const esp=['diez','once','doce','trece','catorce','quince','dieciseis','diecisiete','dieciocho','diecinueve'];
+  const d=['','','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
+  const c=['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
+  if (n<10) return u[n];
+  if (n<20) return esp[n-10];
+  if (n<100) { if(n===20) return 'veinte'; if(n<30) return 'veinti'+u[n-20]; return d[Math.floor(n/10)]+(n%10?' y '+u[n%10]:''); }
+  if (n<1000) { if(n===100) return 'cien'; return c[Math.floor(n/100)]+(n%100?' '+numeroAPalabras(n%100):''); }
+  if (n<1000000) { const m=Math.floor(n/1000), r=n%1000; return (m===1?'mil':numeroAPalabras(m)+' mil')+(r?' '+numeroAPalabras(r):''); }
+  return String(n);
+}
+
+/* =================== INIT =================== */
+(async function init() {
+  await loadState();
+  navigate('dashboard');
+})();
+</script>
+</body>
+</html>
