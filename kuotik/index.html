@@ -13,7 +13,7 @@
   <meta name="author" content="kuotik">
   <meta name="language" content="Spanish">
   <meta name="revisit-after" content="7 days">
-  <link rel="canonical" href="https://kuotik.app/">
+  <link rel="canonical" href="https://kostheronline.github.io/kostherops/kuotik/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
   <meta property="og:image:width" content="600">
   <meta property="og:image:height" content="800">
   <meta property="og:locale" content="es_PE">
-  <meta property="og:url" content="https://kuotik.app/">
+  <meta property="og:url" content="https://kostheronline.github.io/kostherops/kuotik/">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -200,13 +200,13 @@
       </button>
     </nav>
     <div class="px-4 py-4 border-t border-slate-100">
-      <p class="text-[10px] text-slate-400 text-center">kuotik - App de prestamos</p>
+      <p class="text-[10px] text-slate-400 text-center">por <a href="https://kostheronline.github.io/kostherops" target="_blank" class="text-primary font-semibold">KOSTHER Ops</a></p>
     </div>
   </aside>
 
   <!-- CONTENIDO PRINCIPAL -->
   <div class="lg:ml-60">
-    <div class="max-w-md mx-auto lg:max-w-2xl bg-slate-50 min-h-screen relative">
+    <div class="max-w-md mx-auto lg:max-w-4xl bg-slate-50 min-h-screen relative lg:p-6">
 
     <!-- HEADER (mobile: con logo, desktop: oculto) -->
     <header class="header-gradient text-white px-5 pt-5 pb-5 rounded-b-3xl shadow-lg sticky top-0 z-30 lg:hidden">
@@ -231,8 +231,8 @@
           <button onclick="navigate('config')" class="btn-primary mt-3 px-4 py-2 rounded-xl text-sm font-semibold">Ir a configuracion</button>
         </div>
 
-        <!-- Botones esenciales: compartir y agregar a inicio -->
-        <div class="grid grid-cols-2 gap-3 mb-4">
+        <!-- Botones esenciales: compartir, agregar a inicio, Facebook -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
           <button onclick="compartirApp()" class="card p-4 text-center active:scale-95 transition border-2 border-primary">
             <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"/></svg>
@@ -247,9 +247,16 @@
             <p class="font-bold text-sm text-slate-800">Agregar a inicio</p>
             <p class="text-[11px] text-slate-500 mt-0.5">Instala como app</p>
           </button>
+          <a href="https://www.facebook.com/kuotikapp" target="_blank" class="card p-4 text-center active:scale-95 transition border-2 border-blue-500">
+            <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <p class="font-bold text-sm text-slate-800">Apoyar en Facebook</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Sigue la pagina</p>
+          </a>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <div class="card p-4 stat-card" style="animation-delay:0s">
             <p class="text-xs text-slate-500 font-medium">Total prestado</p>
             <p id="stat-prestado" class="text-xl font-bold text-slate-800 mt-1">S/ 0.00</p>
@@ -268,24 +275,34 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="font-bold text-base">Prestamos recientes</h3>
-          <button onclick="navigate('loans')" class="text-primary text-xs font-semibold">Ver todos</button>
-        </div>
-        <div id="dash-loans" class="space-y-3 mb-4"></div>
+        <!-- Layout desktop: 2 columnas; mobile: 1 columna -->
+        <div class="lg:grid lg:grid-cols-3 lg:gap-4">
+          <!-- Columna izquierda (2/3 en desktop) -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-base">Prestamos recientes</h3>
+              <button onclick="navigate('loans')" class="text-primary text-xs font-semibold">Ver todos</button>
+            </div>
+            <div id="dash-loans" class="space-y-3 mb-4"></div>
 
-        <!-- Anuncio 16:9 rotativo (cambia al cambiar de tab) -->
-        <div class="mb-4" id="dash-ad-1"></div>
+            <!-- Anuncio 16:9 rotativo (cambia al cambiar de tab) -->
+            <div class="mb-4" id="dash-ad-1"></div>
 
-        <div class="card p-4 mb-4">
-          <h3 class="font-semibold text-sm text-slate-700 mb-3">Distribucion de capital</h3>
-          <div class="h-44" id="chart-container">
-            <canvas id="chart-distribucion"></canvas>
+            <div class="card p-4 mb-4">
+              <h3 class="font-semibold text-sm text-slate-700 mb-3">Distribucion de capital</h3>
+              <div class="h-44" id="chart-container">
+                <canvas id="chart-distribucion"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna derecha (1/3 en desktop, solo desktop) -->
+          <div class="hidden lg:block">
+            <h3 class="font-bold text-base mb-2">Publicidad</h3>
+            <div id="dash-ad-vertical" class="mb-4"></div>
           </div>
         </div>
 
-        <!-- Segundo anuncio 16:9 (solo desktop) -->
-        <div id="dash-ad-2" class="mb-4 hidden lg:block"></div>
       </section>
 
       <!-- ================= PRESTAMOS ================= -->
@@ -643,6 +660,11 @@
             </button>
           </div>
         </div>
+
+        <div class="card p-4 mt-4 text-center">
+          <p class="text-xs text-slate-400">kuotik es una app de <a href="https://kostheronline.github.io/kostherops" target="_blank" class="text-primary font-semibold">KOSTHER Ops</a></p>
+          <p class="text-[11px] text-slate-400 mt-1"><a href="https://kostheronline.github.io/kostherops/kuotik/" target="_blank" class="underline">kostheronline.github.io/kostherops/kuotik</a></p>
+        </div>
       </section>
 
       <!-- ================= DETALLE PRESTAMO ================= -->
@@ -707,6 +729,51 @@
     <iframe id="pdf-frame" class="flex-1 w-full bg-white" style="border:0"></iframe>
   </div>
 
+  <!-- Modal editar prestamo -->
+  <div id="edit-modal" class="fixed inset-0 bg-black/50 z-[70] hidden items-center justify-center modal-enter p-4">
+    <div class="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center p-4 border-b border-slate-100 sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-base text-slate-800">Editar prestamo</h3>
+        <button onclick="cerrarEditModal()" class="text-slate-400 p-1 active:scale-90 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="edit-form" onsubmit="guardarEdicion(event)" class="p-4 space-y-3">
+        <input type="hidden" id="edit-loan-id">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Nombre del prestatario</label>
+          <input type="text" id="edit-nombre" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">DNI</label>
+            <input type="text" id="edit-dni" inputmode="numeric" maxlength="8" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Telefono</label>
+            <input type="tel" id="edit-tel" inputmode="numeric" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm" oninput="formatearTelInput(this)">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Fecha del prestamo</label>
+          <input type="date" id="edit-fecha" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Direccion</label>
+          <textarea id="edit-direccion" rows="2" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Objeto en garantia (opcional)</label>
+          <input type="text" id="edit-garantia" class="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm">
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="btn-primary flex-1 py-3 rounded-xl font-bold text-sm">Guardar cambios</button>
+          <button type="button" onclick="cerrarEditModal()" class="bg-slate-200 text-slate-600 px-5 py-3 rounded-xl font-semibold text-sm">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 <script>
 /* =================== STORAGE (IndexedDB via LocalForage) =================== */
 const store = localforage.createInstance({
@@ -722,24 +789,24 @@ const VIZARNIK_WA = CONTACTO; // Vizarnik usa el mismo numero que kuotik
 // Anuncios verticales intercalados: kuotik (K) y Vizarnik (V)
 // Orden: K1, V1, K2, V2, K3, V3, V4
 const ADS = [
-  { src: 'brand/ad-1.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de kuotik con una donacion.' },
-  { src: 'ad/vizarnik/1.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio sobre creacion de imagenes para redes sociales. Quiero mas informacion del plan semanal.' },
-  { src: 'brand/ad-2.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar kuotik: ' },
-  { src: 'ad/vizarnik/2.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (anuncio 2). Quiero mas informacion.' },
+  { src: 'brand/ad-1.jpg', wa: CONTACTO, msg: 'kuotik: Hola, quiero apoyar al creador de kuotik con una donacion.' },
+  { src: 'ad/vizarnik/1.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: ¡Quiero publicidad profesional!' },
+  { src: 'brand/ad-2.jpg', wa: CONTACTO, msg: 'kuotik: Hola, tengo una propuesta para mejorar kuotik: ' },
+  { src: 'ad/vizarnik/2.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero que mi negocio se vea serio y confiable.' },
   { src: 'brand/ad-3.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con kuotik gestionas tus prestamos, intereses y moras desde tu celular. Empieza a emprender prestando dinero.' },
-  { src: 'ad/vizarnik/3.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su publicidad sobre gestion de redes sociales (anuncio 3). Me gustaria mas informacion del plan.' },
-  { src: 'ad/vizarnik/4.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de creacion de videos e imagenes para redes sociales (anuncio 4). Quiero mas informacion.' },
+  { src: 'ad/vizarnik/3.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero que mis estados atraigan clientes.' },
+  { src: 'ad/vizarnik/4.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero imagen de marca.' },
 ];
 
 // Anuncios horizontales (banners) intercalados para listas
 const ADS_H = [
-  { src: 'brand/ad-1b.jpg', wa: CONTACTO, msg: 'Hola, quiero apoyar al creador de kuotik con una donacion.' },
-  { src: 'ad/vizarnik/1b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su anuncio horizontal sobre creacion de imagenes para redes sociales. Quiero mas informacion.' },
-  { src: 'brand/ad-2b.jpg', wa: CONTACTO, msg: 'Hola, tengo una propuesta para mejorar kuotik: ' },
-  { src: 'ad/vizarnik/2b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el servicio de contenido semanal para redes sociales (banner 2). Quiero mas informacion.' },
+  { src: 'brand/ad-1b.jpg', wa: CONTACTO, msg: 'kuotik: Hola, quiero apoyar al creador de kuotik con una donacion.' },
+  { src: 'ad/vizarnik/1b.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: ¡Quiero publicidad profesional!' },
+  { src: 'brand/ad-2b.jpg', wa: CONTACTO, msg: 'kuotik: Hola, tengo una propuesta para mejorar kuotik: ' },
+  { src: 'ad/vizarnik/2b.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero que mi negocio se vea serio y confiable.' },
   { src: 'brand/ad-3b.jpg', share: true, msg: 'Convierte tu capital en un negocio. Con kuotik gestionas tus prestamos desde tu celular.' },
-  { src: 'ad/vizarnik/3b.jpg', wa: VIZARNIK_WA, msg: 'Hola, vi su banner sobre gestion de redes sociales (3). Me gustaria mas informacion.' },
-  { src: 'ad/vizarnik/4b.jpg', wa: VIZARNIK_WA, msg: 'Hola, me interesa el plan semanal de contenido para redes sociales (banner 4). Quiero mas informacion.' },
+  { src: 'ad/vizarnik/3b.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero que mis estados atraigan clientes.' },
+  { src: 'ad/vizarnik/4b.jpg', wa: VIZARNIK_WA, msg: 'Vizarnik: Quiero imagen de marca.' },
 ];
 
 /* =================== ESTADO =================== */
@@ -963,6 +1030,12 @@ function openAdH(idx) {
   }
 }
 
+function verticalAdHTML(idx) {
+  const ad = ADS[idx];
+  if (!ad) return '';
+  return `<div class="card overflow-hidden cursor-pointer active:scale-95 transition" onclick="openAd(${idx})"><img src="${ad.src}" alt="Publicidad" class="w-full block" style="aspect-ratio:3/4;object-fit:cover"></div>`;
+}
+
 function horizontalAdHTML(idx) {
   const ad = ADS_H[idx];
   if (!ad) return '';
@@ -1099,10 +1172,12 @@ function renderDashboard() {
   document.getElementById('dash-loans').innerHTML = recientes.length === 0
     ? '<div class="card p-5 text-center text-slate-400 text-sm">No hay prestamos registrados.</div>'
     : recientes.map(l => loanCardHTML(l)).join('');
-  // Anuncios 16:9 rotativos (cambian cada vez que se visita el tab)
+  // Anuncios 16:9 rotativo (mobile y desktop)
   const adI1 = Math.floor(Math.random() * ADS_H.length);
   document.getElementById('dash-ad-1').innerHTML = horizontalAdHTML(adI1);
-  document.getElementById('dash-ad-2').innerHTML = horizontalAdHTML((adI1 + 3) % ADS_H.length);
+  // Anuncio 3:4 vertical (solo desktop)
+  const adVI = Math.floor(Math.random() * ADS.length);
+  document.getElementById('dash-ad-vertical').innerHTML = verticalAdHTML(adVI);
 }
 
 function loanCardHTML(loan) {
@@ -1873,12 +1948,14 @@ function numeroAPalabras(n) {
 }
 
 /* =================== COMPARTIR APP Y AGREGAR A INICIO =================== */
+const APP_URL = 'https://kostheronline.github.io/kostherops/kuotik/';
+
 function compartirApp() {
   const msg = 'Gestiona tus prestamos de dinero con kuotik, la app gratis que te ayuda a controlar intereses, moras y generar contratos en PDF desde tu celular. Emprende prestando dinero.';
   if (navigator.share) {
-    navigator.share({ title: 'kuotik', text: msg, url: window.location.href }).catch(() => {});
+    navigator.share({ title: 'kuotik', text: msg, url: APP_URL }).catch(() => {});
   } else {
-    window.open('https://wa.me/?text=' + encodeURIComponent(msg + ' ' + window.location.href), '_blank');
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg + ' ' + APP_URL), '_blank');
   }
 }
 
@@ -1898,19 +1975,41 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 /* =================== EDITAR PRESTAMO =================== */
-async function editarPrestamo(loanId) {
+function editarPrestamo(loanId) {
   const loan = state.loans.find(l => l.id === loanId);
   if (!loan) return;
-  const nuevoNombre = prompt('Nombre del prestatario:', loan.prestatario.nombre);
-  if (nuevoNombre === null) return;
-  if (nuevoNombre.trim()) loan.prestatario.nombre = capitalizeName(nuevoNombre);
-  const nuevoTel = prompt('Telefono (WhatsApp):', loan.prestatario.telefono);
-  if (nuevoTel !== null) loan.prestatario.telefono = nuevoTel.trim();
-  const nuevaFecha = prompt('Fecha del prestamo (AAAA-MM-DD):', loan.fecha.split('T')[0]);
-  if (nuevaFecha !== null && nuevaFecha.trim()) {
-    loan.fecha = new Date(nuevaFecha + 'T12:00:00').toISOString();
-  }
+  document.getElementById('edit-loan-id').value = loanId;
+  document.getElementById('edit-nombre').value = loan.prestatario.nombre;
+  document.getElementById('edit-dni').value = loan.prestatario.dni;
+  document.getElementById('edit-tel').value = formatPhoneDisplay(loan.prestatario.telefono);
+  document.getElementById('edit-fecha').value = loan.fecha.split('T')[0];
+  document.getElementById('edit-direccion').value = loan.prestatario.direccion;
+  document.getElementById('edit-garantia').value = loan.objetoGarantia || '';
+  const modal = document.getElementById('edit-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function cerrarEditModal() {
+  const modal = document.getElementById('edit-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+async function guardarEdicion(e) {
+  e.preventDefault();
+  const loanId = parseInt(document.getElementById('edit-loan-id').value);
+  const loan = state.loans.find(l => l.id === loanId);
+  if (!loan) return;
+  loan.prestatario.nombre = capitalizeName(document.getElementById('edit-nombre').value);
+  loan.prestatario.dni = document.getElementById('edit-dni').value.trim();
+  loan.prestatario.telefono = cleanPhoneForWA(document.getElementById('edit-tel').value);
+  const fechaVal = document.getElementById('edit-fecha').value;
+  if (fechaVal) loan.fecha = new Date(fechaVal + 'T12:00:00').toISOString();
+  loan.prestatario.direccion = document.getElementById('edit-direccion').value.trim();
+  loan.objetoGarantia = document.getElementById('edit-garantia').value.trim();
   await saveState();
+  cerrarEditModal();
   toast('Prestamo actualizado');
   renderLoanDetail();
 }
